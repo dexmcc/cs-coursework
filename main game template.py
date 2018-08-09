@@ -10,6 +10,7 @@
 """
  
 import pygame
+
  
 # Define some colors
 BLACK = (0, 0, 0)
@@ -18,16 +19,23 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
  
 pygame.init()
- 
+
+#sets screen width and height
+screen_width = 700
+screen_height = 500
+
 # Set the width and height of the screen [width, height]
-size = (700, 500)
+size = (screen_width, screen_height)
 screen = pygame.display.set_mode(size)
  
-pygame.display.set_caption("My Game")
+pygame.display.set_caption("dexter coursework")
  
 # Loop until the user clicks the close button.
 done = False
- 
+
+#set paused variable to false
+paused = False
+
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
  
@@ -37,20 +45,29 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-
+        elif event.type == pygame.KEYDOWN :
+            if event.key == pygame.K_ESCAPE : # changes paused status
+                if paused == True :
+                    paused = False
+                elif paused == False:
+                    paused = True
     # --- Game logic should go here
- 
-    # --- Screen-clearing code goes here
+    if paused == False: #-- only plays game logic and draw loop if paused 
+		# --- Screen-clearing code goes here
     
-    # Here, we clear the screen to white. Don't put other drawing commands
-    # above this, or they will be erased with this command.
+		# Here, we clear the screen to black. Don't put other drawing commands
+		# above this, or they will be erased with this command.
  
-    # If you want a background image, replace this clear with blit'ing the
-    # background image.
-    screen.fill(WHITE)
- 
-    # --- Drawing code should go here
-    
+		# If you want a background image, replace this clear with blit'ing the
+		# background image.
+        screen.fill(BLACK)
+		# --- Drawing code should go here
+        pygame.draw.rect(screen, GREEN, (0,0,20,20))
+    else :
+        #clears screen
+        screen.fill(BLACK)
+        #draws pause screen
+        pygame.draw.rect(screen, RED, (0,0,20,20))
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
  
