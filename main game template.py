@@ -11,7 +11,7 @@
  
 import pygame
 
- 
+
 # Define some colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -19,6 +19,10 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
  
 pygame.init()
+pygame.font.init()
+
+#defines fonts
+my_pause_font = pygame.font.SysFont('Calibri', 50, True, False)
 
 #sets screen width and height
 screen_width = 700
@@ -67,7 +71,8 @@ while not done:
         #clears screen
         screen.fill(BLACK)
         #draws pause screen
-        pygame.draw.rect(screen, RED, (0,0,20,20))
+        paused_text = my_pause_font.render("GAME PAUSED", True, GREEN)
+        screen.blit(paused_text, [0,0])
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
  
