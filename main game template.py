@@ -29,7 +29,7 @@ screen_width = 700
 screen_height = 500
 
 #level initiation variable
-level = 2
+level = 3
 
 # Set the width and height of the screen [width, height]
 size = (screen_width, screen_height)
@@ -74,6 +74,12 @@ elif level == 2:
     for i in range (0,4):
         wall_group.add(temp_wall[i])
         all_sprites_group.add(temp_wall[i])
+elif level == 3:
+    temp_wall = [wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), wall(WHITE, screen_width/35, screen_height,0,0),wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), wall(WHITE, screen_width, (screen_height/25),0,(screen_height/25)*16),wall(WHITE,(screen_width/7)*2,screen_height/25,0,(screen_height/25)*8), wall(WHITE,(screen_width/7)*2,screen_height/25, screen_width - ((screen_width/7)*2),(screen_height/25)*8)]
+    for i in range (0,6):
+        wall_group.add(temp_wall[i])
+        all_sprites_group.add(temp_wall[i])
+
  
 # -------- Main Program Loop -----------
 while not done:
