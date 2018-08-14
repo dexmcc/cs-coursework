@@ -65,9 +65,10 @@ clock = pygame.time.Clock()
 wall_group = pygame.sprite.Group
 
 if level == 1:
-    temp_wall = wall(WHITE, 50, 10, 20,20)
-    wall_group.add(temp_wall)
-    all_sprites_group.add(temp_wall)
+    temp_wall = [wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), wall(WHITE, screen_width/35, screen_height,0,0),wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), wall(WHITE, (screen_width/7)*3, (screen_height/25),(screen_width/7)*2,(screen_height/25)*11)]
+    for i in range (0,4):
+        wall_group.add(temp_wall[i])
+        all_sprites_group.add(temp_wall[i])
  
 # -------- Main Program Loop -----------
 while not done:
