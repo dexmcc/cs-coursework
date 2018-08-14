@@ -13,7 +13,6 @@ import pygame
 import sprites
 
 
-
 # Define some colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -27,6 +26,7 @@ pygame.font.init()
 my_pause_font = pygame.font.SysFont('Calibri', 50, True, False)
 
 #sets screen width and height
+global screen_width
 screen_width = 700
 screen_height = 500
 
@@ -54,25 +54,29 @@ clock = pygame.time.Clock()
 ##creating list of all wall sprites
 wall_group = pygame.sprite.Group
 
-if level == 1:
-    temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0), sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, (screen_width/7)*3, (screen_height/25),(screen_width/7)*2,(screen_height/25)*11)]
-    for i in range (0,4):
-        wall_group.add(temp_wall[i])
-        all_sprites_group.add(temp_wall[i])
-elif level == 2:
-    temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0),sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, screen_width, (screen_height/25),0,(screen_height/25)*11)]
-    for i in range (0,4):
-        wall_group.add(temp_wall[i])
-        all_sprites_group.add(temp_wall[i])
-elif level == 3:
-    temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0),sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, screen_width, (screen_height/25),0,(screen_height/25)*16),sprites.wall(WHITE,(screen_width/7)*2,screen_height/25,0,(screen_height/25)*8), sprites.wall(WHITE,(screen_width/7)*2,screen_height/25, screen_width - ((screen_width/7)*2),(screen_height/25)*8)]
-    for i in range (0,6):
-        wall_group.add(temp_wall[i])
-        all_sprites_group.add(temp_wall[i])
+##level maker subroutine
 
+def level_maker(level):
+    if level == 1:
+        temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0), sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, (screen_width/7)*3, (screen_height/25),(screen_width/7)*2,(screen_height/25)*11)]
+        for i in range (0,4):
+            wall_group.add(temp_wall[i])
+            all_sprites_group.add(temp_wall[i])
+    elif level == 2:
+        temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0),sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, screen_width, (screen_height/25),0,(screen_height/25)*11)]
+        for i in range (0,4):
+            wall_group.add(temp_wall[i])
+            all_sprites_group.add(temp_wall[i])
+    elif level == 3:
+        temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0),sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, screen_width, (screen_height/25),0,(screen_height/25)*16),sprites.wall(WHITE,(screen_width/7)*2,screen_height/25,0,(screen_height/25)*8), sprites.wall(WHITE,(screen_width/7)*2,screen_height/25, screen_width - ((screen_width/7)*2),(screen_height/25)*8)]
+        for i in range (0,6):
+            wall_group.add(temp_wall[i])
+            all_sprites_group.add(temp_wall[i])
+    return wall_group, all_sprites_group
  
 # -------- Main Program Loop -----------
 while not done:
+    level_maker(level)
     # --- Main event loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -85,6 +89,7 @@ while not done:
                     paused = True
     # --- Game logic should go here
     if paused == False: #-- only plays game logic and draw loop if paused 
+
 		# --- Screen-clearing code goes here
     
 		# Here, we clear the screen to black. Don't put other drawing commands
@@ -97,6 +102,7 @@ while not done:
         all_sprites_group.draw(screen)
     else :
         #put event loop for keyboard inputs in
+        
         #clears screen
         screen.fill(BLACK)
         #draws pause screen
