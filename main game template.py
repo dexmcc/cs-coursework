@@ -10,6 +10,8 @@
 """
  
 import pygame
+import sprites
+
 
 
 # Define some colors
@@ -36,18 +38,6 @@ size = (screen_width, screen_height)
 screen = pygame.display.set_mode(size)
  
 pygame.display.set_caption("dexter coursework")
- 
-# defines wall class as sprite
-class wall(pygame.sprite.Sprite):
-    #defines constructor for walls
-    def __init__(self, color, width, height, wall_x, wall_y):
-        #calls sprite constructor
-        super().__init__()
-        self.image = pygame.Surface([width,height])
-        self.image.fill(color)
-        self.rect = self.image.get_rect()
-        self.rect.x = wall_x
-        self.rect.y = wall_y
 
 # Loop until the user clicks the close button.
 done = False
@@ -65,17 +55,17 @@ clock = pygame.time.Clock()
 wall_group = pygame.sprite.Group
 
 if level == 1:
-    temp_wall = [wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), wall(WHITE, screen_width/35, screen_height,0,0),wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), wall(WHITE, (screen_width/7)*3, (screen_height/25),(screen_width/7)*2,(screen_height/25)*11)]
+    temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0), sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, (screen_width/7)*3, (screen_height/25),(screen_width/7)*2,(screen_height/25)*11)]
     for i in range (0,4):
         wall_group.add(temp_wall[i])
         all_sprites_group.add(temp_wall[i])
 elif level == 2:
-    temp_wall = [wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), wall(WHITE, screen_width/35, screen_height,0,0),wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), wall(WHITE, screen_width, (screen_height/25),0,(screen_height/25)*11)]
+    temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0),sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, screen_width, (screen_height/25),0,(screen_height/25)*11)]
     for i in range (0,4):
         wall_group.add(temp_wall[i])
         all_sprites_group.add(temp_wall[i])
 elif level == 3:
-    temp_wall = [wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), wall(WHITE, screen_width/35, screen_height,0,0),wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), wall(WHITE, screen_width, (screen_height/25),0,(screen_height/25)*16),wall(WHITE,(screen_width/7)*2,screen_height/25,0,(screen_height/25)*8), wall(WHITE,(screen_width/7)*2,screen_height/25, screen_width - ((screen_width/7)*2),(screen_height/25)*8)]
+    temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0),sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, screen_width, (screen_height/25),0,(screen_height/25)*16),sprites.wall(WHITE,(screen_width/7)*2,screen_height/25,0,(screen_height/25)*8), sprites.wall(WHITE,(screen_width/7)*2,screen_height/25, screen_width - ((screen_width/7)*2),(screen_height/25)*8)]
     for i in range (0,6):
         wall_group.add(temp_wall[i])
         all_sprites_group.add(temp_wall[i])
