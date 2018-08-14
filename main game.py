@@ -26,12 +26,11 @@ pygame.font.init()
 my_pause_font = pygame.font.SysFont('Calibri', 50, True, False)
 
 #sets screen width and height
-global screen_width
 screen_width = 700
 screen_height = 500
 
 #level initiation variable
-level = 3
+level = 1
 
 # Set the width and height of the screen [width, height]
 size = (screen_width, screen_height)
@@ -53,9 +52,13 @@ clock = pygame.time.Clock()
 
 ##creating list of all wall sprites
 wall_group = pygame.sprite.Group
+## adds player to sprites group
+my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3) , 0, 0)
+all_sprites_group.add(my_player)
+
+
 
 ##level maker subroutine
-
 def level_maker(level):
     if level == 1:
         temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0), sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, (screen_width/7)*3, (screen_height/25),(screen_width/7)*2,(screen_height/25)*11)]
@@ -101,8 +104,6 @@ while not done:
 		# --- Drawing code should go here
         all_sprites_group.draw(screen)
     else :
-        #put event loop for keyboard inputs in
-        
         #clears screen
         screen.fill(BLACK)
         #draws pause screen
