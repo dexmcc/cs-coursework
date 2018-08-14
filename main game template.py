@@ -29,7 +29,7 @@ screen_width = 700
 screen_height = 500
 
 #level initiation variable
-level = 1
+level = 2
 
 # Set the width and height of the screen [width, height]
 size = (screen_width, screen_height)
@@ -66,6 +66,11 @@ wall_group = pygame.sprite.Group
 
 if level == 1:
     temp_wall = [wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), wall(WHITE, screen_width/35, screen_height,0,0),wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), wall(WHITE, (screen_width/7)*3, (screen_height/25),(screen_width/7)*2,(screen_height/25)*11)]
+    for i in range (0,4):
+        wall_group.add(temp_wall[i])
+        all_sprites_group.add(temp_wall[i])
+elif level == 2:
+    temp_wall = [wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), wall(WHITE, screen_width/35, screen_height,0,0),wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), wall(WHITE, screen_width, (screen_height/25),0,(screen_height/25)*11)]
     for i in range (0,4):
         wall_group.add(temp_wall[i])
         all_sprites_group.add(temp_wall[i])
