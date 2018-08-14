@@ -28,14 +28,17 @@ my_pause_font = pygame.font.SysFont('Calibri', 50, True, False)
 screen_width = 700
 screen_height = 500
 
+#level initiation variable
+level = 1
+
 # Set the width and height of the screen [width, height]
 size = (screen_width, screen_height)
 screen = pygame.display.set_mode(size)
  
 pygame.display.set_caption("dexter coursework")
  
-# defines walls class as sprite
-class walls(pygame.sprite.Sprite):
+# defines wall class as sprite
+class wall(pygame.sprite.Sprite):
     #defines constructor for walls
     def __init__(self, color, width, height, wall_x, wall_y):
         #calls sprite constructor
@@ -49,11 +52,22 @@ class walls(pygame.sprite.Sprite):
 # Loop until the user clicks the close button.
 done = False
 
+#initiate all sprites group
+all_sprites_group = pygame.sprite.Group()
+
 #set paused variable to false
 paused = False
 
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
+
+##creating list of all wall sprites
+wall_group = pygame.sprite.Group
+
+if level == 1:
+    temp_wall = wall(WHITE, 50, 10, 20,20)
+    wall_group.add(temp_wall)
+    all_sprites_group.add(temp_wall)
  
 # -------- Main Program Loop -----------
 while not done:
@@ -78,7 +92,7 @@ while not done:
 		# background image.
         screen.fill(BLACK)
 		# --- Drawing code should go here
-        pygame.draw.rect(screen, GREEN, (0,0,20,20))
+        all_sprites_group.draw(screen)
     else :
         #put event loop for keyboard inputs in
         #clears screen
