@@ -34,6 +34,18 @@ screen = pygame.display.set_mode(size)
  
 pygame.display.set_caption("dexter coursework")
  
+# defines walls class as sprite
+class walls(pygame.sprite.Sprite):
+    #defines constructor for walls
+    def __init__(self, color, width, height, wall_x, wall_y):
+        #calls sprite constructor
+        super().__init__()
+        self.image = pygame.Surface([width,height])
+        self.image.fill(color)
+        self.rect = self.image.get_rect()
+        self.rect.x = wall_x
+        self.rect.y = wall_y
+
 # Loop until the user clicks the close button.
 done = False
 
@@ -68,6 +80,7 @@ while not done:
 		# --- Drawing code should go here
         pygame.draw.rect(screen, GREEN, (0,0,20,20))
     else :
+        #put event loop for keyboard inputs in
         #clears screen
         screen.fill(BLACK)
         #draws pause screen
