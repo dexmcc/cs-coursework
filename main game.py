@@ -52,9 +52,9 @@ clock = pygame.time.Clock()
 
 ##creating list of all wall sprites
 wall_group = pygame.sprite.Group
-## adds player to sprites group
-my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3))
-all_sprites_group.add(my_player)
+
+##creating list of all ladder sprites
+ladder_group = pygame.sprite.Group
 
 ##level maker subroutine
 def level_maker(level):
@@ -63,6 +63,10 @@ def level_maker(level):
         for i in range (0,4):
             wall_group.add(temp_wall[i])
             all_sprites_group.add(temp_wall[i])
+        temp_ladder = [sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*13,((screen_width/7)*2),(screen_height/25)*11),sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*13,((screen_width/35)*23),(screen_height/25)*11)]
+        for i in range(0,2):
+            ladder_group.add(temp_ladder[i])
+            all_sprites_group.add(temp_ladder[i])
     elif level == 2:
         temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0),sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, screen_width, (screen_height/25),0,(screen_height/25)*11)]
         for i in range (0,4):
@@ -74,7 +78,10 @@ def level_maker(level):
             wall_group.add(temp_wall[i])
             all_sprites_group.add(temp_wall[i])
     return wall_group, all_sprites_group
- 
+
+ ## adds player to sprites group
+my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3))
+all_sprites_group.add(my_player)
 # -------- Main Program Loop -----------
 while not done:
     level_maker(level)
