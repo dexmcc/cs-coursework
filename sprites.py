@@ -23,4 +23,12 @@ class player(pygame.sprite.Sprite):
     def player_set_speed(self,val):
         self.speed = val
     def update(self):
-        self.rect.x = self.rect.x + self.speed
+        if self.rect.x >= 20 :
+            self.rect.x = self.rect.x + self.speed
+        elif self.rect.x < 20:
+            self.rect.x = 20
+        if self.rect.x <= 650 :
+            self.rect.x = self.rect.x + self.speed
+        elif self.rect.x > 650:
+            self.rect.x = 650
+        

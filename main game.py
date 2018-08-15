@@ -30,7 +30,7 @@ screen_width = 700
 screen_height = 500
 
 #level initiation variable
-level = 3
+level = 1
 
 # Set the width and height of the screen [width, height]
 size = (screen_width, screen_height)
@@ -91,12 +91,12 @@ while not done:
             elif event.key == pygame.K_LEFT and paused == False:
                 my_player.player_set_speed(int(-2))
             elif event.key == pygame.K_RIGHT and paused == False:
-                player.player_set_speed(int(2))
+                my_player.player_set_speed(int(2))
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
-                player.player_set_speed(int(0))
+                my_player.player_set_speed(int(0))
             elif event.key == pygame.K_RIGHT:
-                player.player_set_speed(int(0))
+                my_player.player_set_speed(int(0))
     # --- Game logic should go here
     if paused == False: #-- only plays game logic and draw loop if paused 
 		# --- Screen-clearing code goes here
