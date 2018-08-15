@@ -58,6 +58,9 @@ wall_group = pygame.sprite.Group()
 ##creating list of all ladder sprites
 ladder_group = pygame.sprite.Group()
 
+climb_done_up = False
+climb_done_down = False
+
 ##level maker subroutine
 def level_maker(level):
     if level == 1:
@@ -112,9 +115,10 @@ while not done:
                     my_player.player_set_speed(int(2))
                 elif can_climb == True:
                     if event.key == pygame.K_UP:
-                        my_player.player_climb_speed(-2)
-                    elif event.key == pygame.K_DOWN:
-                        my_player.player_climb_speed(2)
+                        my_player.player_climb_speed(-4)
+                        climb_done_up = False
+                    elif event.key == pygame.K_DOWN :
+                        my_player.player_climb_speed(4)
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 my_player.player_set_speed(int(0))
@@ -127,12 +131,21 @@ while not done:
     # --- Game logic should go here
     if paused == False: #-- only plays game logic and draw loop if paused 
 
+
+
+        ##climbing code
         ladder_check = pygame.sprite.spritecollideany(my_player, ladder_group, False)
         if ladder_check:
             can_climb = True
         else:
             can_climb = False
-        
+            climb_done_up = False           
+            
+
+        if can_climb == False:
+            my_player.player_climb_speed(0)
+
+            
         screen.fill(BLACK)
 		# --- Drawing code should go here
         all_sprites_group.update()
