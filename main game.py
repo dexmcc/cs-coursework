@@ -30,7 +30,7 @@ screen_width = 700
 screen_height = 500
 
 #level initiation variable
-level = 1
+level = 2
 
 # Set the width and height of the screen [width, height]
 size = (screen_width, screen_height)
@@ -72,6 +72,10 @@ def level_maker(level):
         for i in range (0,4):
             wall_group.add(temp_wall[i])
             all_sprites_group.add(temp_wall[i])
+        temp_ladder = [sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*13,((screen_width/7)*2),(screen_height/25)*11),sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*13,((screen_width/35)*23),(screen_height/25)*11)]
+        for i in range(0,2):
+            ladder_group.add(temp_ladder[i])
+            all_sprites_group.add(temp_ladder[i])
     elif level == 3:
         temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0),sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, screen_width, (screen_height/25),0,(screen_height/25)*16),sprites.wall(WHITE,(screen_width/7)*2,screen_height/25,0,(screen_height/25)*8), sprites.wall(WHITE,(screen_width/7)*2,screen_height/25, screen_width - ((screen_width/7)*2),(screen_height/25)*8)]
         for i in range (0,6):
