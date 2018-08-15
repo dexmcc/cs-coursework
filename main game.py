@@ -30,7 +30,7 @@ screen_width = 700
 screen_height = 500
 
 #level initiation variable
-level = 1
+level = 3
 
 # Set the width and height of the screen [width, height]
 size = (screen_width, screen_height)
@@ -53,10 +53,8 @@ clock = pygame.time.Clock()
 ##creating list of all wall sprites
 wall_group = pygame.sprite.Group
 ## adds player to sprites group
-my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3) , 0, 0)
+my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3))
 all_sprites_group.add(my_player)
-
-
 
 ##level maker subroutine
 def level_maker(level):
@@ -90,11 +88,19 @@ while not done:
                     paused = False
                 elif paused == False:
                     paused = True
+            elif event.key == pygame.K_LEFT and paused == False:
+                my_player.player_set_speed(int(-2))
+            elif event.key == pygame.K_RIGHT and paused == False:
+                player.player_set_speed(int(2))
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                player.player_set_speed(int(0))
+            elif event.key == pygame.K_RIGHT:
+                player.player_set_speed(int(0))
     # --- Game logic should go here
     if paused == False: #-- only plays game logic and draw loop if paused 
-
 		# --- Screen-clearing code goes here
-    
+
 		# Here, we clear the screen to black. Don't put other drawing commands
 		# above this, or they will be erased with this command.
  
@@ -102,6 +108,7 @@ while not done:
 		# background image.
         screen.fill(BLACK)
 		# --- Drawing code should go here
+        all_sprites_group.update()
         all_sprites_group.draw(screen)
     else :
         #clears screen
