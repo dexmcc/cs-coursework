@@ -32,3 +32,11 @@ class player(pygame.sprite.Sprite):
         elif self.rect.x > 650:
             self.rect.x = 650
         
+class ladder(pygame.sprite.Sprite):
+    def __init__(self, color, width, height, ladder_x, ladder_y):
+        super().__init__()
+        self.image = pygame.Surface([width,height])
+        self.image.fill(color)
+        self.rect = self.image.get_rect()
+        self.rect.x = ladder_x
+        self.rect.y = ladder_y
