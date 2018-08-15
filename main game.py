@@ -30,7 +30,9 @@ screen_width = 700
 screen_height = 500
 
 #level initiation variable
-level = 3
+level = 1
+
+can_climb = False
 
 # Set the width and height of the screen [width, height]
 size = (screen_width, screen_height)
@@ -51,19 +53,19 @@ paused = False
 clock = pygame.time.Clock()
 
 ##creating list of all wall sprites
-wall_group = pygame.sprite.Group
+wall_group = pygame.sprite.Group()
 
 ##creating list of all ladder sprites
-ladder_group = pygame.sprite.Group
+ladder_group = pygame.sprite.Group()
 
 ##level maker subroutine
 def level_maker(level):
     if level == 1:
-        temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0), sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, (screen_width/7)*3, (screen_height/25),(screen_width/7)*2,(screen_height/25)*11)]
+        temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0), sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, screen_width, (screen_height/25),(screen_width/7)*2,(screen_height/25)*11)]
         for i in range (0,4):
             wall_group.add(temp_wall[i])
             all_sprites_group.add(temp_wall[i])
-        temp_ladder = [sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*13,((screen_width/7)*2),(screen_height/25)*11),sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*13,((screen_width/35)*23),(screen_height/25)*11)]
+        temp_ladder = [sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*13 + 1,((screen_width/7)*2),(screen_height/25)*11 - 1),sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*13 + 1,((screen_width/35)*23),(screen_height/25)*11 - 1)]
         for i in range(0,2):
             ladder_group.add(temp_ladder[i])
             all_sprites_group.add(temp_ladder[i])
@@ -72,8 +74,8 @@ def level_maker(level):
         for i in range (0,4):
             wall_group.add(temp_wall[i])
             all_sprites_group.add(temp_wall[i])
-        temp_ladder = [sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*13,((screen_width/7)*2),(screen_height/25)*11),sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*13,((screen_width/35)*23),(screen_height/25)*11)]
-        for i in range(0,2):
+        temp_ladder = [sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*13 + 1,((screen_width/140)*67),(screen_height/25)*11 - 1)]
+        for i in range(0,1):
             ladder_group.add(temp_ladder[i])
             all_sprites_group.add(temp_ladder[i])
     elif level == 3:
@@ -81,7 +83,7 @@ def level_maker(level):
         for i in range (0,5):
             wall_group.add(temp_wall[i])
             all_sprites_group.add(temp_wall[i])
-        temp_ladder = [sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*8,((screen_width/7)*2),(screen_height/25)*16),sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*8,((screen_width/35)*23),(screen_height/25)*16),sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*8,(screen_width/70)*33,(screen_height/25)*8)]
+        temp_ladder = [sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*8 + 1,((screen_width/7)*2),(screen_height/25)*16-1),sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*8+1,((screen_width/35)*23),(screen_height/25)*16-1),sprites.ladder(RED, (screen_width/70)*4, (screen_height/25)*8+1,(screen_width/70)*33,(screen_height/25)*8-1)]
         for i in range(0,3):
             ladder_group.add(temp_ladder[i])
             all_sprites_group.add(temp_ladder[i])
@@ -103,24 +105,34 @@ while not done:
                     paused = False
                 elif paused == False:
                     paused = True
-            elif event.key == pygame.K_LEFT and paused == False:
-                my_player.player_set_speed(int(-2))
-            elif event.key == pygame.K_RIGHT and paused == False:
-                my_player.player_set_speed(int(2))
+            if paused == False:
+                if event.key == pygame.K_LEFT:
+                    my_player.player_set_speed(int(-2))
+                elif event.key == pygame.K_RIGHT:
+                    my_player.player_set_speed(int(2))
+                elif can_climb == True:
+                    if event.key == pygame.K_UP:
+                        my_player.player_climb_speed(-2)
+                    elif event.key == pygame.K_DOWN:
+                        my_player.player_climb_speed(2)
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 my_player.player_set_speed(int(0))
             elif event.key == pygame.K_RIGHT:
                 my_player.player_set_speed(int(0))
+            elif event.key == pygame.K_UP:
+                my_player.player_climb_speed(0)
+            elif event.key == pygame.K_DOWN:
+                my_player.player_climb_speed(0)
     # --- Game logic should go here
     if paused == False: #-- only plays game logic and draw loop if paused 
-		# --- Screen-clearing code goes here
 
-		# Here, we clear the screen to black. Don't put other drawing commands
-		# above this, or they will be erased with this command.
- 
-		# If you want a background image, replace this clear with blit'ing the
-		# background image.
+        ladder_check = pygame.sprite.spritecollideany(my_player, ladder_group, False)
+        if ladder_check:
+            can_climb = True
+        else:
+            can_climb = False
+        
         screen.fill(BLACK)
 		# --- Drawing code should go here
         all_sprites_group.update()

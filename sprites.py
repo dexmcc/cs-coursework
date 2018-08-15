@@ -20,8 +20,11 @@ class player(pygame.sprite.Sprite):
         self.rect.x = player_x
         self.rect.y = player_y
         self.speed = 0
+        self.climb_speed = 0
     def player_set_speed(self,val):
         self.speed = val
+    def player_climb_speed(self,val):
+        self.climb_speed = val
     def update(self):
         if self.rect.x >= 20 :
             self.rect.x = self.rect.x + self.speed
@@ -31,6 +34,7 @@ class player(pygame.sprite.Sprite):
             self.rect.x = self.rect.x + self.speed
         elif self.rect.x > 650:
             self.rect.x = 650
+        self.rect.y = self.rect.y + self.climb_speed
         
 class ladder(pygame.sprite.Sprite):
     def __init__(self, color, width, height, ladder_x, ladder_y):
