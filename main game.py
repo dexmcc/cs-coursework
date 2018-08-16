@@ -18,6 +18,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
+BLUE = (0,0,255)
  
 pygame.init()
 pygame.font.init()
@@ -103,12 +104,20 @@ def level_maker(level):
     my_player.rect.y = screen_height - (screen_height/25)-((screen_height/10)*3)
     return wall_group, all_sprites_group
 
-def find_direction(player_pos, enemy_pos)
+def find_direction(player_pos, enemy_pos):
     if player_pos > enemy_pos:
         enemy_speed = 1
     elif player_pos < enemy_pos:
         enemy_speed = -1
+    else:
+        enemy_speed = 0
+    my_enemy.set_direction(enemy_speed)
     return enemy_speed
+##test enemy
+my_enemy =  sprites.enemy(BLUE, 20, 10, 200,200,False)
+all_sprites_group.add(my_enemy)
+
+
 
  ## adds player to sprites group
 my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3))
@@ -152,7 +161,8 @@ while not done:
     # --- Game logic should go here
     if paused == False: #-- only plays game logic and draw loop if paused 
 
-
+        find_direction(my_player.rect.x,my_enemy.rect.x)
+        
 
         ##climbing code
         ladder_check = pygame.sprite.spritecollideany(my_player, ladder_group, False)
