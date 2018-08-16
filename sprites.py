@@ -54,7 +54,9 @@ class enemy(pygame.sprite.Sprite):
         self.rect.x = enemy_x
         self.rect.y = enemy_y
         self.can_shoot = can_shoot
-    ##def set_direction(self, direction)
-      ##  if self.direction 
+    def set_direction(self, speed)
+        self.speed = speed
+    def update(self)
+        self.rect.x = self.rect.x + self.speed
         
         

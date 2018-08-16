@@ -103,6 +103,12 @@ def level_maker(level):
     my_player.rect.y = screen_height - (screen_height/25)-((screen_height/10)*3)
     return wall_group, all_sprites_group
 
+def find_direction(player_pos, enemy_pos)
+    if player_pos > enemy_pos:
+        enemy_speed = 1
+    elif player_pos < enemy_pos:
+        enemy_speed = -1
+    return enemy_speed
 
  ## adds player to sprites group
 my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3))
