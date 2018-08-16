@@ -44,3 +44,17 @@ class ladder(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = ladder_x
         self.rect.y = ladder_y
+
+class enemy(pygame.sprite.Sprite):
+    def __init__(self,color,width,height,enemy_x, enemy_y, can_shoot=False):
+        super().__init__()
+        self.image = pygame.surface([width,height])
+        self.image.fill(color)
+        self.rect = self.image.get_rect()
+        self.rect.x = enemy_x
+        self.rect.y = enemy_y
+        self.can_shoot = can_shoot
+    ##def set_direction(self, direction)
+      ##  if self.direction 
+        
+        

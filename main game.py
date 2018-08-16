@@ -30,7 +30,7 @@ screen_width = 700
 screen_height = 500
 
 #level initiation variable
-level = 3
+level = 1
 
 #variables for going up onto the laddres in level 3
 ladders_1 = pygame.sprite.Group()
@@ -71,7 +71,7 @@ ladder_group = pygame.sprite.Group()
 ##level maker subroutine
 def level_maker(level):
     if level == 1:
-        temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0), sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, screen_width, (screen_height/25),(screen_width/7)*2,(screen_height/25)*11)]
+        temp_wall = [sprites.wall(WHITE, screen_width, (screen_height/25), 0, (screen_height-(screen_height/25))), sprites.wall(WHITE, screen_width/35, screen_height,0,0), sprites.wall(WHITE, screen_width/35, screen_height,(screen_width - screen_width/35),0), sprites.wall(WHITE, screen_width, (screen_height/25),0,(screen_height/25)*11)]
         for i in range (0,4):
             wall_group.add(temp_wall[i])
             all_sprites_group.add(temp_wall[i])
@@ -172,7 +172,6 @@ while not done:
                         my_player.rect.y = 170
                         touching_ground = True 
             else :
-                print("hello")
                 if my_player.rect.y ==70:
                     my_player.rect.y = 74
                     touching_ground = True
