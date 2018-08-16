@@ -30,8 +30,18 @@ screen_width = 700
 screen_height = 500
 
 #level initiation variable
-level = 1
+level = 3
 
+#variables for going up onto the laddres in level 3
+ladders_1 = pygame.sprite.Group()
+
+##variables for checking to make sure player rest on ground after climbing
+touching_ground = True
+
+##initailising variable for telling if new level is needed
+new_level = True
+
+##initialising variable for can climb
 can_climb = False
 
 # Set the width and height of the screen [width, height]
@@ -57,9 +67,6 @@ wall_group = pygame.sprite.Group()
 
 ##creating list of all ladder sprites
 ladder_group = pygame.sprite.Group()
-
-climb_done_up = False
-climb_done_down = False
 
 ##level maker subroutine
 def level_maker(level):
@@ -90,14 +97,21 @@ def level_maker(level):
         for i in range(0,3):
             ladder_group.add(temp_ladder[i])
             all_sprites_group.add(temp_ladder[i])
+        ladders_1.add(temp_ladder[0])
+        ladders_1.add(temp_ladder[1])
+    my_player.rect.x = (screen_width/2)-((screen_width/70)*3)/2
+    my_player.rect.y = screen_height - (screen_height/25)-((screen_height/10)*3)
     return wall_group, all_sprites_group
+
 
  ## adds player to sprites group
 my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3))
 all_sprites_group.add(my_player)
 # -------- Main Program Loop -----------
 while not done:
-    level_maker(level)
+    if new_level == True:
+        level_maker(level)
+        new_level = False
     # --- Main event loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -109,16 +123,17 @@ while not done:
                 elif paused == False:
                     paused = True
             if paused == False:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT and touching_ground == True:
                     my_player.player_set_speed(int(-2))
-                elif event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_RIGHT and touching_ground == True:
                     my_player.player_set_speed(int(2))
                 elif can_climb == True:
                     if event.key == pygame.K_UP:
                         my_player.player_climb_speed(-4)
-                        climb_done_up = False
+                        touching_ground = False
                     elif event.key == pygame.K_DOWN :
                         my_player.player_climb_speed(4)
+                        touching_ground = False 
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 my_player.player_set_speed(int(0))
@@ -139,13 +154,36 @@ while not done:
             can_climb = True
         else:
             can_climb = False
-            climb_done_up = False           
-            
+        if ladder_check:
+            if level == 3:
+                ladder_1_check = pygame.sprite.spritecollideany(my_player, ladders_1, False)
+                if ladder_1_check:
+                    if my_player.rect.y ==334:
+                        my_player.rect.y = 330
+                        touching_ground = True
+                    elif my_player.rect.y == 166:
+                        my_player.rect.y = 170
+                        touching_ground = True 
+                else:
+                    if my_player.rect.y == 70:
+                        my_player.rect.y = 74
+                        touching_ground = True
+                    elif my_player.rect.y == 174:
+                        my_player.rect.y = 170
+                        touching_ground = True 
+            else :
+                print("hello")
+                if my_player.rect.y ==70:
+                    my_player.rect.y = 74
+                    touching_ground = True
+                elif my_player.rect.y == 334:
+                    my_player.rect.y = 330
+                    touching_ground = True
 
         if can_climb == False:
             my_player.player_climb_speed(0)
 
-            
+
         screen.fill(BLACK)
 		# --- Drawing code should go here
         all_sprites_group.update()
