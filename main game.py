@@ -75,6 +75,13 @@ ladder_group = pygame.sprite.Group()
 ##creating group of bullets
 bullet_group = pygame.sprite.Group()
 
+##creates group for enemies
+enemy_group = pygame.sprite.Group()
+
+##creates list for bullets
+my_bullet = []
+bullet_list_counter = 0
+
 ##level maker subroutine
 def level_maker(level):
     if level == 1:
@@ -110,14 +117,15 @@ def level_maker(level):
     my_player.rect.y = screen_height - (screen_height/25)-((screen_height/10)*3)
     return wall_group, all_sprites_group
 
-def find_direction(player_pos, enemy_pos):
+def find_direction(player_pos, enemy_pos,temp_enemy):
     if player_pos > enemy_pos:
         enemy_speed = 1
     elif player_pos < enemy_pos:
         enemy_speed = -1
     else:
         enemy_speed = 0
-    my_enemy.set_direction(enemy_speed)
+    
+    temp_enemy.set_direction(enemy_speed)
     return enemy_speed
 
 def shoot(direction, player_x, player_y):
@@ -126,12 +134,14 @@ def shoot(direction, player_x, player_y):
         player_x = player_x
     elif direction == "right":
         player_x = (screen_width/70)*3 + player_x
-    my_bullet = sprites.bullet(RED, 3,3, player_x, player_y,direction)
-    bullet_group.add(my_bullet)
-    all_sprites_group.add(my_bullet)
+    temp_bullet = sprites.bullet(RED, 3,3, player_x, player_y,direction)
+    my_bullet.append(temp_bullet)
+    bullet_group.add(temp_bullet)
+    all_sprites_group.add(temp_bullet)
 ##test enemy
-my_enemy =  sprites.enemy(BLUE, 30, 150, 40,40,False,5)
-all_sprites_group.add(my_enemy)
+my_enemy =  [sprites.enemy(BLUE, 30, 150, 40,40,5,False)]
+enemy_group.add(my_enemy[0])
+all_sprites_group.add(my_enemy[0])
 
 
 
@@ -180,8 +190,11 @@ while not done:
                 my_player.player_climb_speed(0)
     # --- Game logic should go here
     if paused == False: #-- only plays game logic and draw loop if paused 
-
-        find_direction(my_player.rect.x,my_enemy.rect.x)
+        enemy_number = int(len(enemy_group))
+        for i in range(enemy_number):
+            temp_enemy = my_enemy[i]
+            find_direction(my_player.rect.x,temp_enemy.rect.x,temp_enemy)
+            
         
 
         ##climbing code
@@ -218,6 +231,29 @@ while not done:
         if can_climb == False:
             my_player.player_climb_speed(0)
 
+        ##enemy code for checking if it has been hit by a bullet
+        for i in range(enemy_number):
+            temp_enemy = my_enemy[int(i)]
+            enemy_hit_check = pygame.sprite.spritecollideany(temp_enemy,bullet_group)
+            if enemy_hit_check:
+                temp_enemy.health = temp_enemy.health - 1
+                if temp_enemy.health == 0 :
+                    enemy_group.remove(temp_enemy)
+                    all_sprites_group.remove(temp_enemy)
+
+        ##code for getting rid of bullets that have hit enemies
+        bullet_number = len(bullet_group)
+        for i in range(bullet_number):
+            temp_bullet = my_bullet[i]
+            bullet_hit_check_1 = pygame.sprite.spritecollideany(temp_bullet, enemy_group)
+            if bullet_hit_check_1:
+                bullet_hit_check_2 = True
+            else:
+                bullet_hit_check_2 = False
+            if bullet_hit_check_2 == True:
+                bullet_group.remove(temp_bullet)
+                all_sprites_group.remove(temp_bullet)
+                bullet_hit_check_2 = False
 
         screen.fill(BLACK)
 		# --- Drawing code should go here
