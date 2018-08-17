@@ -130,7 +130,7 @@ def shoot(direction, player_x, player_y):
     bullet_group.add(my_bullet)
     all_sprites_group.add(my_bullet)
 ##test enemy
-my_enemy =  sprites.enemy(BLUE, 20, 10, 200,200,False)
+my_enemy =  sprites.enemy(BLUE, 30, 150, 40,40,False,5)
 all_sprites_group.add(my_enemy)
 
 
