@@ -30,6 +30,9 @@ my_pause_font = pygame.font.SysFont('Calibri', 50, True, False)
 screen_width = 700
 screen_height = 500
 
+#player direction initiation variable
+player_direction = "left"
+
 #level initiation variable
 level = 1
 
@@ -68,6 +71,9 @@ wall_group = pygame.sprite.Group()
 
 ##creating list of all ladder sprites
 ladder_group = pygame.sprite.Group()
+
+##creating group of bullets
+bullet_group = pygame.sprite.Group()
 
 ##level maker subroutine
 def level_maker(level):
@@ -113,6 +119,16 @@ def find_direction(player_pos, enemy_pos):
         enemy_speed = 0
     my_enemy.set_direction(enemy_speed)
     return enemy_speed
+
+def shoot(direction, player_x, player_y):
+    player_y = player_y + (screen_width/10)
+    if direction == "left":
+        player_x = player_x
+    elif direction == "right":
+        player_x = (screen_width/70)*3 + player_x
+    my_bullet = sprites.bullet(RED, 3,3, player_x, player_y,direction)
+    bullet_group.add(my_bullet)
+    all_sprites_group.add(my_bullet)
 ##test enemy
 my_enemy =  sprites.enemy(BLUE, 20, 10, 200,200,False)
 all_sprites_group.add(my_enemy)
@@ -140,15 +156,19 @@ while not done:
             if paused == False:
                 if event.key == pygame.K_LEFT and touching_ground == True:
                     my_player.player_set_speed(int(-2))
+                    player_direction = "left"
                 elif event.key == pygame.K_RIGHT and touching_ground == True:
                     my_player.player_set_speed(int(2))
+                    player_direction = "right"
+                elif event.key == pygame.K_SPACE:
+                    shoot(player_direction, my_player.rect.x, my_player.rect.y)
                 elif can_climb == True:
                     if event.key == pygame.K_UP:
                         my_player.player_climb_speed(-4)
                         touching_ground = False
                     elif event.key == pygame.K_DOWN :
                         my_player.player_climb_speed(4)
-                        touching_ground = False 
+                        touching_ground = False
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 my_player.player_set_speed(int(0))

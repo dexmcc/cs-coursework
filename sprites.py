@@ -60,7 +60,7 @@ class enemy(pygame.sprite.Sprite):
         self.rect.x = self.rect.x + self.speed
         
 class bullet(pygame.sprite.Sprite):
-    def __init__(self,color,width,height,bullet_x, bullet_y,direction,strong)
+    def __init__(self,color,width,height,bullet_x, bullet_y,direction):
         super().__init__()
         self.image = pygame.Surface([width,height])
         self.image.fill(color)
@@ -68,11 +68,10 @@ class bullet(pygame.sprite.Sprite):
         self.rect.x = bullet_x
         self.rect.y = bullet_y
         self.direction = direction
-        self.strong = strong
         if self.direction == "left":
-            self.speed = -4
+            self.speed = -6
         elif self.direction == "right":
-            self.speed = 4
+            self.speed = 6
     def update(self):
         self.rect.x = self.rect.x + self.speed
         
