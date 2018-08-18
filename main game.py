@@ -11,7 +11,8 @@
  
 import pygame
 import sprites
-
+import math
+import random
 
 # Define some colors
 BLACK = (0, 0, 0)
@@ -82,6 +83,14 @@ enemy_group = pygame.sprite.Group()
 my_bullet = []
 bullet_list_counter = 0
 
+## creates counter for enemy spawns
+pygame.event.Event(pygame.USEREVENT)
+pygame.time.set_timer(pygame.USEREVENT, 5000)
+##creates spawn for first enemy
+my_enemy =  [sprites.enemy(BLUE, screen_width/70*3, screen_height/10*3, screen_width/35,screen_height-screen_height/25,5,False)]
+enemy_group.add(my_enemy)
+all_sprites_group.add(my_enemy)
+
 ##level maker subroutine
 def level_maker(level):
     if level == 1:
@@ -138,13 +147,26 @@ def shoot(direction, player_x, player_y):
     my_bullet.append(temp_bullet)
     bullet_group.add(temp_bullet)
     all_sprites_group.add(temp_bullet)
-##test enemy
-my_enemy =  [sprites.enemy(BLUE, 30, 150, 40,40,5,False)]
-enemy_group.add(my_enemy[0])
-all_sprites_group.add(my_enemy[0])
 
+##sets a counter for how many enemies has spawned
+enemy_counter = 0
 
-
+def enemy_spawn(enemy_counter):
+    spawn_point = random.randint(1,4)
+    if spawn_point == 1 or spawn_point == 3:
+        spawn_x = screen_width/35
+    else:
+        spawn_x = (screen_width/14)*13
+    if spawn_point == 1 or spawn_point == 2:
+        spawn_y = (screen_height/50)*33
+    else:
+        spawn_y = (screen_height/50)*7
+    temp_enemy = sprites.enemy(BLUE,screen_width/70*3, screen_height/10*3,spawn_x,spawn_y,5,False)
+    my_enemy.appendtemp_enemy)
+    enemy_group.add(temp_enemy)
+    all_sprites_group.add(temp_enemy)
+    enemy_counter += 1
+    return enemy_counter
  ## adds player to sprites group
 my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3))
 all_sprites_group.add(my_player)
@@ -157,6 +179,8 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+        elif event.type == pygame.USEREVENT:
+            enemy_spawn(enemy_counter)
         elif event.type == pygame.KEYDOWN :
             if event.key == pygame.K_ESCAPE : # changes paused status
                 if paused == True :
@@ -190,6 +214,8 @@ while not done:
                 my_player.player_climb_speed(0)
     # --- Game logic should go here
     if paused == False: #-- only plays game logic and draw loop if paused 
+    
+
         enemy_number = int(len(enemy_group))
         for i in range(enemy_number):
             temp_enemy = my_enemy[i]
@@ -232,13 +258,12 @@ while not done:
             my_player.player_climb_speed(0)
 
         ##enemy code for checking if it has been hit by a bullet
-        for i in range(enemy_number):
+        for i in range(len(my_enemy)):
             temp_enemy = my_enemy[int(i)]
             enemy_hit_check = pygame.sprite.spritecollideany(temp_enemy,bullet_group)
             if enemy_hit_check:
                 temp_enemy.health = temp_enemy.health - 1
                 if temp_enemy.health == 0 :
-                    enemy_group.remove(temp_enemy)
                     all_sprites_group.remove(temp_enemy)
 
         ##code for getting rid of bullets that have hit enemies
