@@ -87,9 +87,10 @@ bullet_list_counter = 0
 pygame.event.Event(pygame.USEREVENT)
 pygame.time.set_timer(pygame.USEREVENT, 5000)
 ##creates spawn for first enemy
-my_enemy =  [sprites.enemy(BLUE, screen_width/70*3, screen_height/10*3, screen_width/35,screen_height-screen_height/25,5,False)]
-enemy_group.add(my_enemy)
-all_sprites_group.add(my_enemy)
+my_enemy =  []
+##creates varaible for enemy hit checker
+enemy_hit = False
+
 
 ##level maker subroutine
 def level_maker(level):
@@ -161,10 +162,10 @@ def enemy_spawn(enemy_counter):
         spawn_y = (screen_height/50)*33
     else:
         spawn_y = (screen_height/50)*7
-    temp_enemy = sprites.enemy(BLUE,screen_width/70*3, screen_height/10*3,spawn_x,spawn_y,5,False)
-    my_enemy.appendtemp_enemy)
-    enemy_group.add(temp_enemy)
-    all_sprites_group.add(temp_enemy)
+    temp_spawn_enemy = sprites.enemy(BLUE,screen_width/70*3, screen_height/10*3,spawn_x,spawn_y,5,False)
+    my_enemy.append(temp_spawn_enemy)
+    enemy_group.add(temp_spawn_enemy)
+    all_sprites_group.add(temp_spawn_enemy)
     enemy_counter += 1
     return enemy_counter
  ## adds player to sprites group
@@ -216,10 +217,9 @@ while not done:
     if paused == False: #-- only plays game logic and draw loop if paused 
     
 
-        enemy_number = int(len(enemy_group))
-        for i in range(enemy_number):
-            temp_enemy = my_enemy[i]
-            find_direction(my_player.rect.x,temp_enemy.rect.x,temp_enemy)
+
+        for enemy_find_direction in enemy_group:
+            find_direction(my_player.rect.x,enemy_find_direction.rect.x,enemy_find_direction)
             
         
 
@@ -258,27 +258,36 @@ while not done:
             my_player.player_climb_speed(0)
 
         ##enemy code for checking if it has been hit by a bullet
-        for i in range(len(my_enemy)):
-            temp_enemy = my_enemy[int(i)]
-            enemy_hit_check = pygame.sprite.spritecollideany(temp_enemy,bullet_group)
-            if enemy_hit_check:
-                temp_enemy.health = temp_enemy.health - 1
-                if temp_enemy.health == 0 :
-                    all_sprites_group.remove(temp_enemy)
+       ## for i in enemy_group:
+         ##   enemy_hit_checker = pygame.sprite.spritecollideany(i,bullet_group)
+           ## if enemy_hit_checker:
+             ##   enemy_hit == True
+            ##if enemy_hit == True:
+              ##  i.enemy_take_damage()
+                ##enemy_hit = False
+                ##if i.health == 0 :
+                  ##  all_sprites_group.remove(i)
 
         ##code for getting rid of bullets that have hit enemies
-        bullet_number = len(bullet_group)
-        for i in range(bullet_number):
-            temp_bullet = my_bullet[i]
-            bullet_hit_check_1 = pygame.sprite.spritecollideany(temp_bullet, enemy_group)
+        for test_bullet in bullet_group:
+            bullet_hit_check_1 = pygame.sprite.spritecollideany(test_bullet, enemy_group)
             if bullet_hit_check_1:
                 bullet_hit_check_2 = True
             else:
                 bullet_hit_check_2 = False
             if bullet_hit_check_2 == True:
-                bullet_group.remove(temp_bullet)
-                all_sprites_group.remove(temp_bullet)
+                ##checking for enemy damaged
+                for test_enemy in enemy_group:
+                    enemy_hit = pygame.sprite.collide_rect(test_bullet,test_enemy)
+                    if enemy_hit == True:
+                        test_enemy.enemy_take_damage()
+                        if test_enemy.health == 0:
+                            enemy_group.remove(test_enemy)
+                            all_sprites_group.remove(test_enemy)
+                        bullet_group.remove(test_bullet)
+                        all_sprites_group.remove(test_bullet)
                 bullet_hit_check_2 = False
+                
 
         screen.fill(BLACK)
 		# --- Drawing code should go here
