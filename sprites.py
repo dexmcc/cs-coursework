@@ -21,6 +21,9 @@ class player(pygame.sprite.Sprite):
         self.rect.y = player_y
         self.speed = 0
         self.climb_speed = 0
+        self.score = 0
+    def add_points(self,points):
+        self.score = self.score + points
     def player_set_speed(self,val):
         self.speed = val
     def player_climb_speed(self,val):

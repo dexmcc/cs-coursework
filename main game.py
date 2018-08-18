@@ -20,12 +20,14 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0,0,255)
+YELLOW = (255,255,0)
  
 pygame.init()
 pygame.font.init()
 
 #defines fonts
 my_pause_font = pygame.font.SysFont('Calibri', 50, True, False)
+score_font = pygame.font.SysFont('Calibri', 15, True, False)
 
 #sets screen width and height
 screen_width = 700
@@ -90,7 +92,8 @@ pygame.time.set_timer(pygame.USEREVENT, 5000)
 my_enemy =  []
 ##creates varaible for enemy hit checker
 enemy_hit = False
-
+##creates paused screen text
+paused_text = my_pause_font.render("GAME PAUSED", True, GREEN)
 
 ##level maker subroutine
 def level_maker(level):
@@ -171,6 +174,8 @@ def enemy_spawn(enemy_counter):
  ## adds player to sprites group
 my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3))
 all_sprites_group.add(my_player)
+
+
 # -------- Main Program Loop -----------
 while not done:
     if new_level == True:
@@ -284,21 +289,26 @@ while not done:
                         if test_enemy.health == 0:
                             enemy_group.remove(test_enemy)
                             all_sprites_group.remove(test_enemy)
+                            my_player.add_points(10)
                         bullet_group.remove(test_bullet)
                         all_sprites_group.remove(test_bullet)
                 bullet_hit_check_2 = False
                 
-
+        ##creates score text
+        score_text_string = "Score: {}".format(my_player.score)
+        score_text = score_font.render(score_text_string, True, YELLOW)
+        
         screen.fill(BLACK)
 		# --- Drawing code should go here
         all_sprites_group.update()
         all_sprites_group.draw(screen)
+        screen.blit(score_text, [30,0])
     else :
         #clears screen
         screen.fill(BLACK)
         #draws pause screen
-        paused_text = my_pause_font.render("GAME PAUSED", True, GREEN)
-        screen.blit(paused_text, [0,0])
+        screen.blit(paused_text, [200,0])
+        screen.blit(score_text, [30,0])
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
  
