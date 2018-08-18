@@ -175,6 +175,18 @@ def enemy_spawn(enemy_counter):
 my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3))
 all_sprites_group.add(my_player)
 
+#creates main title screen
+instructions_1 = "use left and right keys to move left and right"
+instructions_2 = "use up and down keys while touching a ladder to climb up or down"
+instructions_3 = "use space bar to shoot"
+instructions_4 = "use escape to pause"
+instructions_5 = "press space to start game"
+main_text_1 = score_font.render(instructions_1, True, YELLOW)
+main_text_2 = score_font.render(instructions_2, True, YELLOW)
+main_text_3 = score_font.render(instructions_3, True, YELLOW)
+main_text_4 = score_font.render(instructions_4, True, YELLOW)
+main_text_5 = score_font.render(instructions_5, True, YELLOW)
+game_started = False
 
 # -------- Main Program Loop -----------
 while not done:
@@ -202,6 +214,7 @@ while not done:
                     player_direction = "right"
                 elif event.key == pygame.K_SPACE:
                     shoot(player_direction, my_player.rect.x, my_player.rect.y)
+                    game_started = True
                 elif can_climb == True:
                     if event.key == pygame.K_UP:
                         my_player.player_climb_speed(-4)
@@ -219,96 +232,103 @@ while not done:
             elif event.key == pygame.K_DOWN:
                 my_player.player_climb_speed(0)
     # --- Game logic should go here
-    if paused == False: #-- only plays game logic and draw loop if paused 
-    
-
-
-        for enemy_find_direction in enemy_group:
-            find_direction(my_player.rect.x,enemy_find_direction.rect.x,enemy_find_direction)
-            
+    if game_started == True:
+        if paused == False: #-- only plays game logic and draw loop if paused 
         
 
-        ##climbing code
-        ladder_check = pygame.sprite.spritecollideany(my_player, ladder_group, False)
-        if ladder_check:
-            can_climb = True
-        else:
-            can_climb = False
-        if ladder_check:
-            if level == 3:
-                ladder_1_check = pygame.sprite.spritecollideany(my_player, ladders_1, False)
-                if ladder_1_check:
-                    if my_player.rect.y ==334:
-                        my_player.rect.y = 330
-                        touching_ground = True
-                    elif my_player.rect.y == 166:
-                        my_player.rect.y = 170
-                        touching_ground = True 
-                else:
-                    if my_player.rect.y == 70:
+
+            for enemy_find_direction in enemy_group:
+                find_direction(my_player.rect.x,enemy_find_direction.rect.x,enemy_find_direction)
+                
+            
+
+            ##climbing code
+            ladder_check = pygame.sprite.spritecollideany(my_player, ladder_group, False)
+            if ladder_check:
+                can_climb = True
+            else:
+                can_climb = False
+            if ladder_check:
+                if level == 3:
+                    ladder_1_check = pygame.sprite.spritecollideany(my_player, ladders_1, False)
+                    if ladder_1_check:
+                        if my_player.rect.y ==334:
+                            my_player.rect.y = 330
+                            touching_ground = True
+                        elif my_player.rect.y == 166:
+                            my_player.rect.y = 170
+                            touching_ground = True 
+                    else:
+                        if my_player.rect.y == 70:
+                            my_player.rect.y = 74
+                            touching_ground = True
+                        elif my_player.rect.y == 174:
+                            my_player.rect.y = 170
+                            touching_ground = True 
+                else :
+                    if my_player.rect.y ==70:
                         my_player.rect.y = 74
                         touching_ground = True
-                    elif my_player.rect.y == 174:
-                        my_player.rect.y = 170
-                        touching_ground = True 
-            else :
-                if my_player.rect.y ==70:
-                    my_player.rect.y = 74
-                    touching_ground = True
-                elif my_player.rect.y == 334:
-                    my_player.rect.y = 330
-                    touching_ground = True
+                    elif my_player.rect.y == 334:
+                        my_player.rect.y = 330
+                        touching_ground = True
 
-        if can_climb == False:
-            my_player.player_climb_speed(0)
+            if can_climb == False:
+                my_player.player_climb_speed(0)
 
-        ##enemy code for checking if it has been hit by a bullet
-       ## for i in enemy_group:
-         ##   enemy_hit_checker = pygame.sprite.spritecollideany(i,bullet_group)
-           ## if enemy_hit_checker:
-             ##   enemy_hit == True
-            ##if enemy_hit == True:
-              ##  i.enemy_take_damage()
-                ##enemy_hit = False
-                ##if i.health == 0 :
-                  ##  all_sprites_group.remove(i)
+            ##enemy code for checking if it has been hit by a bullet
+           ## for i in enemy_group:
+             ##   enemy_hit_checker = pygame.sprite.spritecollideany(i,bullet_group)
+               ## if enemy_hit_checker:
+                 ##   enemy_hit == True
+                ##if enemy_hit == True:
+                  ##  i.enemy_take_damage()
+                    ##enemy_hit = False
+                    ##if i.health == 0 :
+                      ##  all_sprites_group.remove(i)
 
-        ##code for getting rid of bullets that have hit enemies
-        for test_bullet in bullet_group:
-            bullet_hit_check_1 = pygame.sprite.spritecollideany(test_bullet, enemy_group)
-            if bullet_hit_check_1:
-                bullet_hit_check_2 = True
-            else:
-                bullet_hit_check_2 = False
-            if bullet_hit_check_2 == True:
-                ##checking for enemy damaged
-                for test_enemy in enemy_group:
-                    enemy_hit = pygame.sprite.collide_rect(test_bullet,test_enemy)
-                    if enemy_hit == True:
-                        test_enemy.enemy_take_damage()
-                        if test_enemy.health == 0:
-                            enemy_group.remove(test_enemy)
-                            all_sprites_group.remove(test_enemy)
-                            my_player.add_points(10)
-                        bullet_group.remove(test_bullet)
-                        all_sprites_group.remove(test_bullet)
-                bullet_hit_check_2 = False
-                
-        ##creates score text
-        score_text_string = "Score: {}".format(my_player.score)
-        score_text = score_font.render(score_text_string, True, YELLOW)
-        
-        screen.fill(BLACK)
-		# --- Drawing code should go here
-        all_sprites_group.update()
-        all_sprites_group.draw(screen)
-        screen.blit(score_text, [30,0])
-    else :
-        #clears screen
-        screen.fill(BLACK)
-        #draws pause screen
-        screen.blit(paused_text, [200,0])
-        screen.blit(score_text, [30,0])
+            ##code for getting rid of bullets that have hit enemies
+            for test_bullet in bullet_group:
+                bullet_hit_check_1 = pygame.sprite.spritecollideany(test_bullet, enemy_group)
+                if bullet_hit_check_1:
+                    bullet_hit_check_2 = True
+                else:
+                    bullet_hit_check_2 = False
+                if bullet_hit_check_2 == True:
+                    ##checking for enemy damaged
+                    for test_enemy in enemy_group:
+                        enemy_hit = pygame.sprite.collide_rect(test_bullet,test_enemy)
+                        if enemy_hit == True:
+                            test_enemy.enemy_take_damage()
+                            if test_enemy.health == 0:
+                                enemy_group.remove(test_enemy)
+                                all_sprites_group.remove(test_enemy)
+                                my_player.add_points(10)
+                            bullet_group.remove(test_bullet)
+                            all_sprites_group.remove(test_bullet)
+                    bullet_hit_check_2 = False
+                    
+            ##creates score text
+            score_text_string = "Score: {}".format(my_player.score)
+            score_text = score_font.render(score_text_string, True, YELLOW)
+            
+            screen.fill(BLACK)
+                    # --- Drawing code should go here
+            all_sprites_group.update()
+            all_sprites_group.draw(screen)
+            screen.blit(score_text, [30,0])
+        else :
+            #clears screen
+            screen.fill(BLACK)
+            #draws pause screen
+            screen.blit(paused_text, [200,0])
+            screen.blit(score_text, [30,0])
+    if game_started == False:
+        screen.blit(main_text_1, [0,50])
+        screen.blit(main_text_2, [0,100])
+        screen.blit(main_text_3, [0,150])
+        screen.blit(main_text_4, [0,200])
+        screen.blit(main_text_5, [0,250])
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
  
