@@ -172,7 +172,7 @@ def enemy_spawn(enemy_counter):
     enemy_counter += 1
     return enemy_counter
  ## adds player to sprites group
-my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3))
+my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3), 5)
 all_sprites_group.add(my_player)
 
 #creates main title screen
@@ -307,7 +307,15 @@ while not done:
                             bullet_group.remove(test_bullet)
                             all_sprites_group.remove(test_bullet)
                     bullet_hit_check_2 = False
+
+            ##code for checking if enemies hit player
+            for test_enemy in enemy_group:
+                player_hit = pygame.sprite.spritecollide(my_player,enemy_group,False)
+                for i in player_hit:
+                    enemy_group.remove(player_hit)
+                    all_sprites_group.remove(player_hit)
                     
+            
             ##creates score text
             score_text_string = "Score: {}".format(my_player.score)
             score_text = score_font.render(score_text_string, True, YELLOW)
