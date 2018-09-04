@@ -39,6 +39,8 @@ class player(pygame.sprite.Sprite):
         elif self.rect.x > 650:
             self.rect.x = 650
         self.rect.y = self.rect.y + self.climb_speed
+    def player_hit(self):
+        self.health = self.health - 1
         
 class ladder(pygame.sprite.Sprite):
     def __init__(self, color, width, height, ladder_x, ladder_y):

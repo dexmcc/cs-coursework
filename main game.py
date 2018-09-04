@@ -314,17 +314,23 @@ while not done:
                 for i in player_hit:
                     enemy_group.remove(player_hit)
                     all_sprites_group.remove(player_hit)
+                    my_player.player_hit()
                     
             
             ##creates score text
             score_text_string = "Score: {}".format(my_player.score)
             score_text = score_font.render(score_text_string, True, YELLOW)
+
+            ##creates health text
+            health_text_string = "health: {}".format(my_player.health)
+            health_text = score_font.render(health_text_string, True, YELLOW)
             
             screen.fill(BLACK)
                     # --- Drawing code should go here
             all_sprites_group.update()
             all_sprites_group.draw(screen)
             screen.blit(score_text, [30,0])
+            screen.blit(health_text, [150,0])
         else :
             #clears screen
             screen.fill(BLACK)
