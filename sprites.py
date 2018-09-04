@@ -12,7 +12,7 @@ class wall(pygame.sprite.Sprite):
         self.rect.y = wall_y
         
 class player(pygame.sprite.Sprite):
-    def __init__(self, color, width, height, player_x, player_y,player_health):
+    def __init__(self, color, width, height, player_x, player_y,player_health,player_lives):
         super().__init__()
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
@@ -23,6 +23,7 @@ class player(pygame.sprite.Sprite):
         self.climb_speed = 0
         self.score = 0
         self.health = player_health
+        self.lives = player_lives
     def add_points(self,points):
         self.score = self.score + points
     def player_set_speed(self,val):
@@ -41,6 +42,9 @@ class player(pygame.sprite.Sprite):
         self.rect.y = self.rect.y + self.climb_speed
     def player_hit(self):
         self.health = self.health - 1
+    def player_lose_life(self,val):
+        self.lives = self.lives - 1
+        self.health = val
         
 class ladder(pygame.sprite.Sprite):
     def __init__(self, color, width, height, ladder_x, ladder_y):

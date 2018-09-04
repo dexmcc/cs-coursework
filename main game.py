@@ -87,13 +87,16 @@ bullet_list_counter = 0
 
 ## creates counter for enemy spawns
 pygame.event.Event(pygame.USEREVENT)
-pygame.time.set_timer(pygame.USEREVENT, 5000)
+pygame.time.set_timer(pygame.USEREVENT, 2500)
 ##creates spawn for first enemy
 my_enemy =  []
 ##creates varaible for enemy hit checker
 enemy_hit = False
 ##creates paused screen text
 paused_text = my_pause_font.render("GAME PAUSED", True, GREEN)
+
+##sets health max for player
+max_health = 10
 
 ##level maker subroutine
 def level_maker(level):
@@ -172,7 +175,7 @@ def enemy_spawn(enemy_counter):
     enemy_counter += 1
     return enemy_counter
  ## adds player to sprites group
-my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3), 5)
+my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3), max_health,3)
 all_sprites_group.add(my_player)
 
 #creates main title screen
@@ -187,6 +190,7 @@ main_text_3 = score_font.render(instructions_3, True, YELLOW)
 main_text_4 = score_font.render(instructions_4, True, YELLOW)
 main_text_5 = score_font.render(instructions_5, True, YELLOW)
 game_started = False
+
 
 # -------- Main Program Loop -----------
 while not done:
@@ -315,7 +319,8 @@ while not done:
                     enemy_group.remove(player_hit)
                     all_sprites_group.remove(player_hit)
                     my_player.player_hit()
-                    
+                    if my_player.health == 0:
+                        my_player.player_lose_life(max_health)
             
             ##creates score text
             score_text_string = "Score: {}".format(my_player.score)
@@ -324,6 +329,10 @@ while not done:
             ##creates health text
             health_text_string = "health: {}".format(my_player.health)
             health_text = score_font.render(health_text_string, True, YELLOW)
+
+            ##creates lives text
+            lives_text_string = "lives: {}".format(my_player.lives)
+            lives_text = score_font.render(lives_text_string,True,YELLOW)
             
             screen.fill(BLACK)
                     # --- Drawing code should go here
@@ -331,6 +340,7 @@ while not done:
             all_sprites_group.draw(screen)
             screen.blit(score_text, [30,0])
             screen.blit(health_text, [150,0])
+            screen.blit(lives_text, [300,0])
         else :
             #clears screen
             screen.fill(BLACK)
