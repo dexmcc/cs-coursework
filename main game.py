@@ -168,7 +168,7 @@ def enemy_spawn(enemy_counter):
         spawn_y = (screen_height/50)*33
     else:
         spawn_y = (screen_height/50)*7
-    temp_spawn_enemy = sprites.enemy(BLUE,screen_width/70*3, screen_height/10*3,spawn_x,spawn_y,5,False)
+    temp_spawn_enemy = sprites.enemy(BLUE,screen_width/70*3, screen_height/10*3,spawn_x,spawn_y,5)
     my_enemy.append(temp_spawn_enemy)
     enemy_group.add(temp_spawn_enemy)
     all_sprites_group.add(temp_spawn_enemy)

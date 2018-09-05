@@ -56,14 +56,13 @@ class ladder(pygame.sprite.Sprite):
         self.rect.y = ladder_y
 
 class enemy(pygame.sprite.Sprite):
-    def __init__(self,color,width,height,enemy_x, enemy_y, health,can_shoot=False):
+    def __init__(self,color,width,height,enemy_x, enemy_y, health):
         super().__init__()
         self.image = pygame.Surface([width,height])
         self.image.fill(color)
         self.rect = self.image.get_rect()
         self.rect.x = enemy_x
         self.rect.y = enemy_y
-        self.can_shoot = can_shoot
         self.health = health
         self.speed = 0
     def set_direction(self,speed):
@@ -73,6 +72,12 @@ class enemy(pygame.sprite.Sprite):
         return self.health
     def update(self):
         self.rect.x = self.rect.x + self.speed
+    def enemy_get_x(self):
+        return self.rect.x
+    def enemy_get_y(self):
+        return self.rect.y
+    def enemy_get_health(self):
+        return self.health
         
 class bullet(pygame.sprite.Sprite):
     def __init__(self,color,width,height,bullet_x, bullet_y,direction):
