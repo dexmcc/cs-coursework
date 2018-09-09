@@ -33,70 +33,131 @@ score_font = pygame.font.SysFont('Calibri', 15, True, False)
 screen_width = 700
 screen_height = 500
 
-#player direction initiation variable
-player_direction = "left"
-
-#level initiation variable
-level = 1
-
-#variables for going up onto the laddres in level 3
-ladders_1 = pygame.sprite.Group()
-
-##variables for checking to make sure player rest on ground after climbing
-touching_ground = True
-
-##initailising variable for telling if new level is needed
-new_level = True
-
-##initialising variable for can climb
-can_climb = False
-
 # Set the width and height of the screen [width, height]
 size = (screen_width, screen_height)
 screen = pygame.display.set_mode(size)
- 
+
 pygame.display.set_caption("dexter coursework")
-
-# Loop until the user clicks the close button.
-done = False
-
-#initiate all sprites group
-all_sprites_group = pygame.sprite.Group()
-
-#set paused variable to false
-paused = False
 
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
 
-##creating list of all wall sprites
-wall_group = pygame.sprite.Group()
-
-##creating list of all ladder sprites
-ladder_group = pygame.sprite.Group()
-
-##creating group of bullets
-bullet_group = pygame.sprite.Group()
-
-##creates group for enemies
-enemy_group = pygame.sprite.Group()
-
-##creates list for bullets
-my_bullet = []
-bullet_list_counter = 0
-
 ## creates counter for enemy spawns
 pygame.event.Event(pygame.USEREVENT)
 pygame.time.set_timer(pygame.USEREVENT, 2500)
-##creates spawn for first enemy
-my_enemy =  []
-##creates varaible for enemy hit checker
-enemy_hit = False
+
 ##creates paused screen text
 paused_text = my_pause_font.render("GAME PAUSED", True, GREEN)
 
-##sets health max for player
-max_health = 10
+##sets new game variable
+first_game = True
+
+##initialisation function
+def initialise_variables():
+    #player direction initiation variable
+    global player_direction
+    player_direction = "left"
+
+    #level initiation variable
+    global level
+    level = 1
+
+    ##variables for checking to make sure player rest on ground after climbing
+    global touching_ground
+    touching_ground = True
+
+    ##initailising variable for telling if new level is needed
+    global new_level
+    new_level = True
+
+    ##initialising variable for can climb
+    global can_climb
+    can_climb = False
+
+    # Loop until the user clicks the close button.
+    global done
+    done = False
+
+    #set paused variable to false
+    global paused
+    paused = False
+
+    ## game over initialised
+    global game_over
+    game_over = False
+    
+    #variables for going up onto the laddres in level 3
+    global ladders_1
+    ladders_1 = pygame.sprite.Group()
+
+    #initiate all sprites group
+    global all_sprites_group
+    all_sprites_group = pygame.sprite.Group()
+
+    ##creating list of all wall sprites
+    global wall_group
+    wall_group = pygame.sprite.Group()
+
+    ##creating list of all ladder sprites
+    global ladder_group
+    ladder_group = pygame.sprite.Group()
+
+    ##creating group of bullets
+    global bullet_group
+    bullet_group = pygame.sprite.Group()
+
+    ##creates group for enemies
+    global enemy_group
+    enemy_group = pygame.sprite.Group()
+
+    ##creates list for bullets
+    global my_bullet
+    global bullet_list_counter
+    my_bullet = []
+    bullet_list_counter = 0
+
+    ##creates spawn for first enemy
+    global my_enemy
+    my_enemy =  []
+
+    ##creates varaible for enemy hit checker
+    global enemy_hit
+    enemy_hit = False
+
+    ##sets health max for player
+    global max_health
+    max_health = 10
+
+    ##sets a counter for how many enemies has spawned
+    global enemy_counter
+    enemy_counter = 0
+
+    ##sets variable so lives stay the same when going up a level but reset when restarting the game
+    global current_lives
+    current_lives = 3
+
+    ##game started variable
+    global game_started
+    game_started = False
+    
+    ##current score variable
+    global current_score
+    current_score = 0
+
+    ##creates player
+    global my_player
+    my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3), max_health,current_lives, 0)
+    all_sprites_group.add(my_player)
+
+    ##start new game
+    global start_new_game
+    start_new_game = True
+
+initialise_variables()
+
+all_sprites_group= pygame.sprite.Group()
+my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3), max_health,current_lives, 0)
+all_sprites_group.add(my_player)
 
 ##level maker subroutine
 def level_maker(level):
@@ -155,9 +216,6 @@ def shoot(direction, player_x, player_y):
     bullet_group.add(temp_bullet)
     all_sprites_group.add(temp_bullet)
 
-##sets a counter for how many enemies has spawned
-enemy_counter = 0
-
 def enemy_spawn(enemy_counter):
     spawn_point = random.randint(1,4)
     if spawn_point == 1 or spawn_point == 3:
@@ -174,9 +232,6 @@ def enemy_spawn(enemy_counter):
     all_sprites_group.add(temp_spawn_enemy)
     enemy_counter += 1
     return enemy_counter
- ## adds player to sprites group
-my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3), max_health,3)
-all_sprites_group.add(my_player)
 
 #creates main title screen
 instructions_1 = "use left and right keys to move left and right"
@@ -189,13 +244,22 @@ main_text_2 = score_font.render(instructions_2, True, YELLOW)
 main_text_3 = score_font.render(instructions_3, True, YELLOW)
 main_text_4 = score_font.render(instructions_4, True, YELLOW)
 main_text_5 = score_font.render(instructions_5, True, YELLOW)
-game_started = False
+
+#creates game over screen
+over_1 = "GAME OVER"
+over_2 = "press space to play again"
+over_text_1 = score_font.render(over_1, True, RED)
+over_text_2 = score_font.render(over_2, True, RED)
 
 
 # -------- Main Program Loop -----------
 while not done:
+    if start_new_game == True:
+        initialise_variables()
+        start_new_game = False
     if new_level == True:
         level_maker(level)
+        my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3), max_health,current_lives,current_score)
         new_level = False
     # --- Main event loop
     for event in pygame.event.get():
@@ -213,12 +277,17 @@ while not done:
                 if event.key == pygame.K_LEFT and touching_ground == True:
                     my_player.player_set_speed(int(-2))
                     player_direction = "left"
+                    print(my_player.speed)
                 elif event.key == pygame.K_RIGHT and touching_ground == True:
                     my_player.player_set_speed(int(2))
                     player_direction = "right"
                 elif event.key == pygame.K_SPACE:
                     shoot(player_direction, my_player.rect.x, my_player.rect.y)
                     game_started = True
+                    first_game = False
+                elif event.key ==pygame.K_MINUS:
+                    game_over = True
+                    game_started = False
                 elif can_climb == True:
                     if event.key == pygame.K_UP:
                         my_player.player_climb_speed(-4)
@@ -239,7 +308,7 @@ while not done:
     if game_started == True:
         if paused == False: #-- only plays game logic and draw loop if paused 
         
-
+            
 
             for enemy_find_direction in enemy_group:
                 find_direction(my_player.rect.x,enemy_find_direction.rect.x,enemy_find_direction)
@@ -280,16 +349,6 @@ while not done:
             if can_climb == False:
                 my_player.player_climb_speed(0)
 
-            ##enemy code for checking if it has been hit by a bullet
-           ## for i in enemy_group:
-             ##   enemy_hit_checker = pygame.sprite.spritecollideany(i,bullet_group)
-               ## if enemy_hit_checker:
-                 ##   enemy_hit == True
-                ##if enemy_hit == True:
-                  ##  i.enemy_take_damage()
-                    ##enemy_hit = False
-                    ##if i.health == 0 :
-                      ##  all_sprites_group.remove(i)
 
             ##code for getting rid of bullets that have hit enemies
             for test_bullet in bullet_group:
@@ -308,6 +367,7 @@ while not done:
                                 enemy_group.remove(test_enemy)
                                 all_sprites_group.remove(test_enemy)
                                 my_player.add_points(10)
+                                current_score = current_score + 10
                             bullet_group.remove(test_bullet)
                             all_sprites_group.remove(test_bullet)
                     bullet_hit_check_2 = False
@@ -321,6 +381,9 @@ while not done:
                     my_player.player_hit()
                     if my_player.health == 0:
                         my_player.player_lose_life(max_health)
+                        if my_player.lives < 0:
+                            game_over = True
+                            game_started = False
             
             ##creates score text
             score_text_string = "Score: {}".format(my_player.score)
@@ -348,11 +411,23 @@ while not done:
             screen.blit(paused_text, [200,0])
             screen.blit(score_text, [30,0])
     if game_started == False:
-        screen.blit(main_text_1, [0,50])
-        screen.blit(main_text_2, [0,100])
-        screen.blit(main_text_3, [0,150])
-        screen.blit(main_text_4, [0,200])
-        screen.blit(main_text_5, [0,250])
+        if first_game == True:
+            screen.blit(main_text_1, [0,50])
+            screen.blit(main_text_2, [0,100])
+            screen.blit(main_text_3, [0,150])
+            screen.blit(main_text_4, [0,200])
+            screen.blit(main_text_5, [0,250])
+            first_game == False
+        elif game_over == True:
+            screen.fill(BLACK)
+            end_score = current_score
+            over_score = "your score was: {}".format(current_score)
+            over_score_text = score_font.render(over_score, True, RED)
+            screen.blit(over_text_1, [200,200])
+            screen.blit(over_score_text, [200,300])
+            screen.blit(over_text_2, [200,400])
+            start_new_game = True
+            
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
  
