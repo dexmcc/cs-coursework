@@ -52,6 +52,9 @@ paused_text = my_pause_font.render("GAME PAUSED", True, GREEN)
 ##sets new game variable
 first_game = True
 
+my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3), 0,0, 0)
+
+
 ##initialisation function
 def initialise_variables():
     #player direction initiation variable
@@ -144,20 +147,18 @@ def initialise_variables():
     global current_score
     current_score = 0
 
-    ##creates player
-    global my_player
-    my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3), max_health,current_lives, 0)
-    all_sprites_group.add(my_player)
-
     ##start new game
     global start_new_game
     start_new_game = True
 
+    ##initialises playerr attributes
+    my_player.health = max_health
+    my_player.score = current_score
+    my_player.lives = current_lives
+    
 initialise_variables()
 
-all_sprites_group= pygame.sprite.Group()
-my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3), max_health,current_lives, 0)
-all_sprites_group.add(my_player)
+
 
 ##level maker subroutine
 def level_maker(level):
@@ -259,8 +260,8 @@ while not done:
         start_new_game = False
     if new_level == True:
         level_maker(level)
-        my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3), max_health,current_lives,current_score)
         new_level = False
+        all_sprites_group.add(my_player)
     # --- Main event loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -285,9 +286,8 @@ while not done:
                     shoot(player_direction, my_player.rect.x, my_player.rect.y)
                     game_started = True
                     first_game = False
-                elif event.key ==pygame.K_MINUS:
-                    game_over = True
-                    game_started = False
+                ##elif event.key ==pygame.K_MINUS:
+                    
                 elif can_climb == True:
                     if event.key == pygame.K_UP:
                         my_player.player_climb_speed(-4)
@@ -381,6 +381,8 @@ while not done:
                     my_player.player_hit()
                     if my_player.health == 0:
                         my_player.player_lose_life(max_health)
+                        my_player.rect.x =(screen_width/2)-((screen_width/70)*3)/2
+                        my_player.rect.y = screen_height-(screen_height/25)-((screen_height/10)*3)
                         if my_player.lives < 0:
                             game_over = True
                             game_started = False
@@ -410,7 +412,7 @@ while not done:
             #draws pause screen
             screen.blit(paused_text, [200,0])
             screen.blit(score_text, [30,0])
-    if game_started == False:
+    elif game_started == False:
         if first_game == True:
             screen.blit(main_text_1, [0,50])
             screen.blit(main_text_2, [0,100])
