@@ -232,15 +232,17 @@ def find_direction(player_pos_x, enemy_pos_x, player_pos_y, enemy_pos_y, temp_en
 
 
 def shoot(direction, player_x, player_y):
-    player_y = player_y + (screen_width/10)
-    if direction == "left":
-        player_x = player_x
-    elif direction == "right":
-        player_x = (screen_width/70)*3 + player_x
-    temp_bullet = sprites.bullet(RED, 3,3, player_x, player_y,direction)
-    my_bullet.append(temp_bullet)
-    bullet_group.add(temp_bullet)
-    all_sprites_group.add(temp_bullet)
+    if my_player.bullet_timer <= (pygame.time.get_ticks() - 300):
+        player_y = player_y + (screen_width/10)
+        if direction == "left":
+            player_x = player_x
+        elif direction == "right":
+            player_x = (screen_width/70)*3 + player_x
+        temp_bullet = sprites.bullet(RED, 3,3, player_x, player_y,direction)
+        my_bullet.append(temp_bullet)
+        bullet_group.add(temp_bullet)
+        all_sprites_group.add(temp_bullet)
+        my_player.bullet_timer = pygame.time.get_ticks()
 
 def enemy_spawn(enemy_counter):
     spawn_point = random.randint(1,4)
@@ -303,7 +305,6 @@ while not done:
                 if event.key == pygame.K_LEFT and touching_ground == True:
                     my_player.player_set_speed(int(-2))
                     player_direction = "left"
-                    print(my_player.speed)
                 elif event.key == pygame.K_RIGHT and touching_ground == True:
                     my_player.player_set_speed(int(2))
                     player_direction = "right"

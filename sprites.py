@@ -24,6 +24,7 @@ class player(pygame.sprite.Sprite):
         self.score = player_score
         self.health = player_health
         self.lives = player_lives
+        self.bullet_timer = 0
     def add_points(self,points):
         self.score = self.score + points
     def player_set_speed(self,val):
