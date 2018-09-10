@@ -44,7 +44,7 @@ clock = pygame.time.Clock()
 
 ## creates counter for enemy spawns
 pygame.event.Event(pygame.USEREVENT)
-pygame.time.set_timer(pygame.USEREVENT, 2500)
+pygame.time.set_timer(pygame.USEREVENT, 4000)
 
 ##creates paused screen text
 paused_text = my_pause_font.render("GAME PAUSED", True, GREEN)
@@ -195,16 +195,41 @@ def level_maker(level):
     my_player.rect.y = screen_height - (screen_height/25)-((screen_height/10)*3)
     return wall_group, all_sprites_group
 
-def find_direction(player_pos, enemy_pos,temp_enemy):
-    if player_pos > enemy_pos:
-        enemy_speed = 1
-    elif player_pos < enemy_pos:
-        enemy_speed = -1
-    else:
-        enemy_speed = 0
-    
-    temp_enemy.set_direction(enemy_speed)
-    return enemy_speed
+def find_direction(player_pos_x, enemy_pos_x, player_pos_y, enemy_pos_y, temp_enemy):
+    if player_pos_y == enemy_pos_y:
+        temp_direction = "x"
+        if player_pos_x > enemy_pos_x:
+            enemy_speed = 1
+        elif player_pos_x < enemy_pos_x:
+            enemy_speed = -1
+        else:
+            enemy_speed = 0
+    elif player_pos_y > enemy_pos_y:
+        if pygame.sprite.spritecollideany(temp_enemy, ladder_group):
+            temp_direction = "y"
+            enemy_speed = 1
+        else:
+            temp_direction = "x"
+            if player_pos_x > enemy_pos_x:
+                enemy_speed = 1
+            elif player_pos_x < enemy_pos_x:
+                enemy_speed = -1
+            else:
+                enemy_speed = 0
+    elif player_pos_y < enemy_pos_y:
+        if pygame.sprite.spritecollideany(temp_enemy, ladder_group):
+            temp_direction = "y"
+            enemy_speed = -1
+        else:
+            temp_direction = "x"
+            if player_pos_x > enemy_pos_x:
+                enemy_speed = 1
+            elif player_pos_x < enemy_pos_x:
+                enemy_speed = -1
+            else:
+                enemy_speed = 0
+    temp_enemy.set_direction(enemy_speed,temp_direction)
+
 
 def shoot(direction, player_x, player_y):
     player_y = player_y + (screen_width/10)
@@ -311,7 +336,7 @@ while not done:
             
 
             for enemy_find_direction in enemy_group:
-                find_direction(my_player.rect.x,enemy_find_direction.rect.x,enemy_find_direction)
+                find_direction(my_player.rect.x,enemy_find_direction.rect.x,my_player.rect.y, enemy_find_direction.rect.y, enemy_find_direction)
                 
             
 

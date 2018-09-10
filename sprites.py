@@ -65,13 +65,17 @@ class enemy(pygame.sprite.Sprite):
         self.rect.y = enemy_y
         self.health = health
         self.speed = 0
-    def set_direction(self,speed):
+    def set_direction(self,speed,direction):
         self.speed = speed
+        self.direction = direction
     def enemy_take_damage(self):
         self.health = self.health - 1
         return self.health
     def update(self):
-        self.rect.x = self.rect.x + self.speed
+        if self.direction == "x":
+            self.rect.x = self.rect.x + self.speed
+        else:
+            self.rect.y = self.rect.y + self.speed
     def enemy_get_x(self):
         return self.rect.x
     def enemy_get_y(self):
