@@ -442,7 +442,9 @@ while not done:
             lives_text_string = "lives: {}".format(my_player.lives)
             lives_text = score_font.render(lives_text_string,True,YELLOW)
 
-
+            ##coins text
+            coins_text_string = "coins: {}".format(my_player.coins)
+            coins_text = score_font.render(coins_text_string, True, YELLOW)
             
             screen.fill(BLACK)
                     # --- Drawing code should go here
@@ -451,6 +453,7 @@ while not done:
             screen.blit(score_text, [30,0])
             screen.blit(health_text, [150,0])
             screen.blit(lives_text, [300,0])
+            screen.blit(coins_text, [400,0])
         else :
             #clears screen
             screen.fill(BLACK)
