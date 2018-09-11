@@ -114,6 +114,10 @@ def initialise_variables():
     global enemy_group
     enemy_group = pygame.sprite.Group()
 
+    ##creating door group for the one door
+    global door_group
+    door_group = pygame.sprite.GroupSingle()
+
     ##creates list for bullets
     global my_bullet
     global bullet_list_counter
@@ -290,7 +294,7 @@ while not done:
         level_maker(level)
         new_level = False
         all_sprites_group.add(my_player)
-        if level == 1:
+        if level == 1 or level == 2:
             my_door = sprites.door(ORANGE, 325, 120)
     # --- Main event loop
     for event in pygame.event.get():
@@ -316,7 +320,8 @@ while not done:
                     game_started = True
                     first_game = False
                 elif event.key ==pygame.K_MINUS:
-                   my_door.hidden = False 
+                    door_group.add(my_door)
+                    all_sprites_group.add(my_door)
                 elif can_climb == True:
                     if event.key == pygame.K_UP:
                         my_player.player_climb_speed(-4)
@@ -420,11 +425,15 @@ while not done:
                         if my_player.lives < 0:
                             game_over = True
                             game_started = False
-            
+            ##code for advancing level if door is touched
+            if pygame.sprite.spritecollide(my_player, door_group, False):
+                new_level = True
+                all_sprites_group.remove(my_door)
+                door_group.remove(my_door)
+                level = level + 1
             ##creates score text
             score_text_string = "Score: {}".format(my_player.score)
             score_text = score_font.render(score_text_string, True, YELLOW)
-
             ##creates health text
             health_text_string = "health: {}".format(my_player.health)
             health_text = score_font.render(health_text_string, True, YELLOW)
