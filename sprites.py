@@ -25,6 +25,7 @@ class player(pygame.sprite.Sprite):
         self.health = player_health
         self.lives = player_lives
         self.bullet_timer = 0
+        self.coins = 0
     def add_points(self,points):
         self.score = self.score + points
     def player_set_speed(self,val):
@@ -112,6 +113,12 @@ class door(pygame.sprite.Sprite):
         self.in_group = False
     def reveal_door(self):
         self.hidden = False
-    
 
-        
+class coin(pygame.sprite.Sprite):
+    def __init__(self,color,coin_x, coin_y):
+        super().__init__()
+        self.image = pygame.Surface([10,10])
+        self.image.fill(color)
+        self.rect = self.image.get_rect()
+        self.rect.x = coin_x
+        self.rect.y = coin_y

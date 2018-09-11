@@ -441,6 +441,8 @@ while not done:
             ##creates lives text
             lives_text_string = "lives: {}".format(my_player.lives)
             lives_text = score_font.render(lives_text_string,True,YELLOW)
+
+
             
             screen.fill(BLACK)
                     # --- Drawing code should go here
