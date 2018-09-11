@@ -99,6 +99,3 @@ class bullet(pygame.sprite.Sprite):
             self.speed = 6
     def update(self):
         self.rect.x = self.rect.x + self.speed
-        
-        
-        

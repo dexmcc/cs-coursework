@@ -52,7 +52,7 @@ paused_text = my_pause_font.render("GAME PAUSED", True, GREEN)
 ##sets new game variable
 first_game = True
 
-my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/10)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/25)-((screen_height/10)*3), 0,0, 0)
+my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/20)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/5)*4, 0,0, 0)
 
 
 ##initialisation function
@@ -192,7 +192,7 @@ def level_maker(level):
         ladders_1.add(temp_ladder[0])
         ladders_1.add(temp_ladder[1])
     my_player.rect.x = (screen_width/2)-((screen_width/70)*3)/2
-    my_player.rect.y = screen_height - (screen_height/25)-((screen_height/10)*3)
+    my_player.rect.y = screen_height-(screen_height/25)-((screen_height/20)*3)
     return wall_group, all_sprites_group
 
 def find_direction(player_pos_x, enemy_pos_x, player_pos_y, enemy_pos_y, temp_enemy):
@@ -233,7 +233,7 @@ def find_direction(player_pos_x, enemy_pos_x, player_pos_y, enemy_pos_y, temp_en
 
 def shoot(direction, player_x, player_y):
     if my_player.bullet_timer <= (pygame.time.get_ticks() - 300):
-        player_y = player_y + (screen_width/10)
+        player_y = player_y + (screen_width/40)*3
         if direction == "left":
             player_x = player_x
         elif direction == "right":
@@ -251,10 +251,10 @@ def enemy_spawn(enemy_counter):
     else:
         spawn_x = (screen_width/14)*13
     if spawn_point == 1 or spawn_point == 2:
-        spawn_y = (screen_height/50)*33
+        spawn_y = screen_height-(screen_height/25)-((screen_height/20)*3)
     else:
-        spawn_y = (screen_height/50)*7
-    temp_spawn_enemy = sprites.enemy(BLUE,screen_width/70*3, screen_height/10*3,spawn_x,spawn_y,5)
+        spawn_y = (screen_height/100)*29
+    temp_spawn_enemy = sprites.enemy(BLUE,screen_width/70*3, (screen_height/20)*3,spawn_x,spawn_y,5)
     my_enemy.append(temp_spawn_enemy)
     enemy_group.add(temp_spawn_enemy)
     all_sprites_group.add(temp_spawn_enemy)
