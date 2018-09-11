@@ -45,7 +45,7 @@ clock = pygame.time.Clock()
 
 ## creates counter for enemy spawns
 pygame.event.Event(pygame.USEREVENT)
-pygame.time.set_timer(pygame.USEREVENT, 4000)
+pygame.time.set_timer(pygame.USEREVENT, 3000)
 
 ##creates paused screen text
 paused_text = my_pause_font.render("GAME PAUSED", True, GREEN)
@@ -291,6 +291,12 @@ while not done:
         initialise_variables()
         start_new_game = False
     if new_level == True:
+        for i in ladder_group:
+            ladder_group.remove(i)
+            all_sprites_group.remove(i)
+        for i in wall_group:
+            wall_group.remove(i)
+            all_sprites_group.remove(i)
         level_maker(level)
         new_level = False
         all_sprites_group.add(my_player)
