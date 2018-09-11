@@ -364,18 +364,18 @@ while not done:
                         elif my_player.rect.y == 174:
                             my_player.rect.y = 170
                             touching_ground = True 
-                else :
-                    if my_player.rect.y ==70:
-                        my_player.rect.y = 74
+                else:
+                    if my_player.rect.y == 145:
+                        my_player.rect.y = 149                        
                         touching_ground = True
-                    elif my_player.rect.y == 334:
-                        my_player.rect.y = 330
+                    elif my_player.rect.y == 409:
+                        my_player.rect.y = 405
                         touching_ground = True
-
+            
             if can_climb == False:
                 my_player.player_climb_speed(0)
 
-
+            print(my_player.rect.y)
             ##code for getting rid of bullets that have hit enemies
             for test_bullet in bullet_group:
                 bullet_hit_check_1 = pygame.sprite.spritecollideany(test_bullet, enemy_group)
