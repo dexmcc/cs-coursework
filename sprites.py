@@ -99,3 +99,18 @@ class bullet(pygame.sprite.Sprite):
             self.speed = 6
     def update(self):
         self.rect.x = self.rect.x + self.speed
+
+class door(pygame.sprite.Sprite):
+    def __init__(self,color,,door_x, door_y):
+        super().__init__()
+        self.image = pygame.Surface([50,100])
+        self.image.fill(color)
+        self.rect = self.image.get_rect()
+        self.rect.x = door_x
+        self.rect.y = door_y
+        self.hidden = True
+    def reveal_door(self):
+        self.hidden = False
+    
+
+        

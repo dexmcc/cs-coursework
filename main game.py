@@ -312,8 +312,9 @@ while not done:
                     shoot(player_direction, my_player.rect.x, my_player.rect.y)
                     game_started = True
                     first_game = False
-                ##elif event.key ==pygame.K_MINUS:
-                    
+                elif event.key ==pygame.K_MINUS:
+                    new_level = True
+                    level = 2
                 elif can_climb == True:
                     if event.key == pygame.K_UP:
                         my_player.player_climb_speed(-4)
