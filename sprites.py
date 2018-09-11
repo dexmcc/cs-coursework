@@ -101,7 +101,7 @@ class bullet(pygame.sprite.Sprite):
         self.rect.x = self.rect.x + self.speed
 
 class door(pygame.sprite.Sprite):
-    def __init__(self,color,,door_x, door_y):
+    def __init__(self,color,door_x, door_y):
         super().__init__()
         self.image = pygame.Surface([50,100])
         self.image.fill(color)
@@ -109,6 +109,7 @@ class door(pygame.sprite.Sprite):
         self.rect.x = door_x
         self.rect.y = door_y
         self.hidden = True
+        self.in_group = False
     def reveal_door(self):
         self.hidden = False
     

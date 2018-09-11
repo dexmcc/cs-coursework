@@ -21,6 +21,7 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0,0,255)
 YELLOW = (255,255,0)
+ORANGE = (255, 150, 0)
  
 pygame.init()
 pygame.font.init()
@@ -289,6 +290,8 @@ while not done:
         level_maker(level)
         new_level = False
         all_sprites_group.add(my_player)
+        if level == 1:
+            my_door = sprites.door(ORANGE, 325, 120)
     # --- Main event loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -313,8 +316,7 @@ while not done:
                     game_started = True
                     first_game = False
                 elif event.key ==pygame.K_MINUS:
-                    new_level = True
-                    level = 2
+                   my_door.hidden = False 
                 elif can_climb == True:
                     if event.key == pygame.K_UP:
                         my_player.player_climb_speed(-4)
@@ -376,7 +378,12 @@ while not done:
             if can_climb == False:
                 my_player.player_climb_speed(0)
 
-            print(my_player.rect.y)
+            ##code for level door
+            if new_level == False:
+                if my_door.in_group == False and my_door.hidden == False:
+                    all_sprites_group.add(my_door)
+                    my_door.in_group = True
+            
             ##code for getting rid of bullets that have hit enemies
             for test_bullet in bullet_group:
                 bullet_hit_check_1 = pygame.sprite.spritecollideany(test_bullet, enemy_group)
