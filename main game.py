@@ -156,6 +156,10 @@ def initialise_variables():
     global start_new_game
     start_new_game = True
 
+    ##coin group
+    global coin_group
+    coin_group = pygame.sprite.Group()
+
     ##initialises playerr attributes
     my_player.health = max_health
     my_player.score = current_score
@@ -265,6 +269,14 @@ def enemy_spawn(enemy_counter):
     all_sprites_group.add(temp_spawn_enemy)
     enemy_counter += 1
     return enemy_counter
+
+def coin_drop(enemy_x,enemy_y):
+    enemy_x = enemy_x + (screen_width/140)*3
+    enemy_y = enemy_y + screen_height/10
+    my_coin = sprites.coin(YELLOW,enemy_x,enemy_y)
+    coin_group.add(my_coin)
+    all_sprites_group.add(my_coin)
+    
 
 #creates main title screen
 instructions_1 = "use left and right keys to move left and right"
@@ -413,6 +425,7 @@ while not done:
                         if enemy_hit == True:
                             test_enemy.enemy_take_damage()
                             if test_enemy.health == 0:
+                                coin_drop(test_enemy.rect.x, test_enemy.rect.y)
                                 enemy_group.remove(test_enemy)
                                 all_sprites_group.remove(test_enemy)
                                 my_player.add_points(10)
