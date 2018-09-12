@@ -337,13 +337,17 @@ while not done:
                         touching_ground = False
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
-                my_player.player_set_speed(int(0))
+                if my_player.speed == -2:
+                    my_player.player_set_speed(int(0))
             elif event.key == pygame.K_RIGHT:
-                my_player.player_set_speed(int(0))
+                if my_player.speed == 2:
+                    my_player.player_set_speed(int(0))
             elif event.key == pygame.K_UP:
-                my_player.player_climb_speed(0)
+                if my_player.climb_speed == -4:
+                    my_player.player_climb_speed(0)
             elif event.key == pygame.K_DOWN:
-                my_player.player_climb_speed(0)
+                if my_player.climb_speed == 4:
+                    my_player.player_climb_speed(0)
     # --- Game logic should go here
     if game_started == True:
         if paused == False: #-- only plays game logic and draw loop if paused 
