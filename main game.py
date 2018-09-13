@@ -405,6 +405,13 @@ while not done:
             if can_climb == False:
                 my_player.player_climb_speed(0)
 
+            ##code for player colliding with a coin
+            for i in coin_group:
+                if pygame.sprite.collide_rect(my_player,i):
+                    my_player.coins = my_player.coins + 1
+                    coin_group.remove(i)
+                    all_sprites_group.remove(i)
+            
             ##code for level door
             if new_level == False:
                 if my_door.in_group == False and my_door.hidden == False:
