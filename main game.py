@@ -23,6 +23,7 @@ BLUE = (0,0,255)
 YELLOW = (255,255,0)
 ORANGE = (255, 150, 0)
 PURPLE = (255,0,255)
+PINK = (255, 200, 200)
  
 pygame.init()
 pygame.font.init()
@@ -301,7 +302,14 @@ def enemy_spawn(enemy_counter):
         spawn_y = screen_height-(screen_height/25)-((screen_height/20)*3)
     else:
         spawn_y = (screen_height/100)*29
-    temp_spawn_enemy = sprites.enemy(BLUE,screen_width/70*3, (screen_height/20)*3,spawn_x,spawn_y,5)
+    type_chooser = random.randint(1,7)
+    if type_chooser >= 6:
+        enemy_type = "powerup"
+        enemy_color = YELLOW
+    else:
+        enemy_type = "coin"
+        enemy_color = BLUE
+    temp_spawn_enemy = sprites.enemy(enemy_color,screen_width/70*3, (screen_height/20)*3,spawn_x,spawn_y,5,enemy_type)
     my_enemy.append(temp_spawn_enemy)
     enemy_group.add(temp_spawn_enemy)
     all_sprites_group.add(temp_spawn_enemy)
@@ -315,6 +323,19 @@ def coin_drop(enemy_x,enemy_y):
     coin_group.add(my_coin)
     all_sprites_group.add(my_coin)
         
+def powerup_drop(enemy_x,enemy_y):
+    enemy_x = enemy_x + screen_width/35
+    enemy_y = enemy_y + (screen_height/55)*2
+    powerup_checker = random.randint(1,2)
+    if powerup_checker == 1:
+        powerup_type = "speed"
+        powerup_color = PURPLE
+    elif powerup_checker == 2:
+        powerup_type = "power"
+        powerup_color = PINK
+    my_powerup = sprites.power_up(powerup_color,enemy_x,enemy_y,powerup_type)
+    power_up_group.add(my_powerup)
+    all_sprites_group.add(my_powerup)
 
 #creates main title screen
 instructions_1 = "use left and right keys to move left and right"
@@ -379,7 +400,7 @@ while not done:
                     door_group.add(my_door)
                     all_sprites_group.add(my_door)
                 elif event.key == pygame.K_0:
-                    my_powerup = sprites.power_up(PURPLE,50, 200, "power")
+                    my_powerup = sprites.power_up(PURPLE,50, 200, "speed")
                     power_up_group.add(my_powerup)
                     all_sprites_group.add(my_powerup)
                 elif can_climb == True:
@@ -391,16 +412,16 @@ while not done:
                         touching_ground = False
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
-                if my_player.speed == -player_speed:
+                if my_player.speed == -2 or my_player.speed  == -3.5 or my_player.speed == -player_speed:
                     my_player.player_set_speed(int(0))
             elif event.key == pygame.K_RIGHT:
-                if my_player.speed == player_speed:
+                if my_player.speed == 2 or my_player.speed == 3.5:
                     my_player.player_set_speed(int(0))
             elif event.key == pygame.K_UP:
-                if my_player.climb_speed == -player_speed*2:
+                if my_player.climb_speed == -4 or my_player.climb_speed == -7:
                     my_player.player_climb_speed(0)
             elif event.key == pygame.K_DOWN:
-                if my_player.climb_speed == player_speed*2:
+                if my_player.climb_speed == 4 or my_player.climb_speed == -7:
                     my_player.player_climb_speed(0)
     # --- Game logic should go here
     if game_started == True:
@@ -474,10 +495,14 @@ while not done:
                         if enemy_hit == True:
                             test_enemy.enemy_take_damage(bullet_damage)
                             if test_enemy.health <= 0:
-                                coin_drop(test_enemy.rect.x, test_enemy.rect.y)
+                                if test_enemy.type == "coin":
+                                    coin_drop(test_enemy.rect.x, test_enemy.rect.y)
+                                    my_player.add_points(10)
+                                elif test_enemy.type == "powerup":
+                                    powerup_drop(test_enemy.rect.x,test_enemy.rect.y)
+                                    my_player.add_points(30)
                                 enemy_group.remove(test_enemy)
                                 all_sprites_group.remove(test_enemy)
-                                my_player.add_points(10)
                                 current_score = current_score + 10
                             bullet_group.remove(test_bullet)
                             all_sprites_group.remove(test_bullet)

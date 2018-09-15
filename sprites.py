@@ -58,7 +58,7 @@ class ladder(pygame.sprite.Sprite):
         self.rect.y = ladder_y
 
 class enemy(pygame.sprite.Sprite):
-    def __init__(self,color,width,height,enemy_x, enemy_y, health):
+    def __init__(self,color,width,height,enemy_x, enemy_y, health,enemy_type):
         super().__init__()
         self.image = pygame.Surface([width,height])
         self.image.fill(color)
@@ -68,6 +68,7 @@ class enemy(pygame.sprite.Sprite):
         self.health = health
         self.speed = 0
         self.touching_ground = True
+        self.type = enemy_type
     def set_direction(self,speed,direction):
         self.speed = speed
         self.direction = direction
