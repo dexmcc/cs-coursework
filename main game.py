@@ -165,7 +165,7 @@ def initialise_variables():
     global power_up_group
     power_up_group = pygame.sprite.Group()
 
-    ##powered up varaible
+    ##speed powered up varaible
     global speed_powered_up
     speed_powered_up = False
 
@@ -294,9 +294,6 @@ def coin_drop(enemy_x,enemy_y):
     my_coin = sprites.coin(YELLOW,enemy_x,enemy_y)
     coin_group.add(my_coin)
     all_sprites_group.add(my_coin)
-
-def player_powerdown(power_type):
-    print("hello")
         
 
 #creates main title screen
@@ -486,10 +483,24 @@ while not done:
                 if pygame.sprite.spritecollide(my_player,power_up_group,False):
                     temp_type = test_powerup.type
                     if temp_type == "speed":
-                        player_speed = 3
+                        player_speed = 3.5
                         speed_powered_up = True
                     power_up_group.remove(test_powerup)
                     all_sprites_group.remove(test_powerup)
+
+            ##code for speed powering down
+            if speed_powered_up == True:
+                speed_timer_start = pygame.time.get_ticks()
+                speed_timer_end = speed_timer_start + 10000
+                speed_timer_on = True
+                speed_powered_up = False
+            elif speed_timer_on == True:
+                speed_timer = pygame.time.get_ticks()
+                if speed_timer >= speed_timer_end:
+                    player_speed = 2
+                    speed_timer_on = False
+
+                        
 
             ##code for advancing level if door is touched
             if pygame.sprite.spritecollide(my_player, door_group, False):
