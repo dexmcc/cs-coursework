@@ -207,10 +207,13 @@ def level_maker(level):
 def find_direction(player_pos_x, enemy_pos_x, player_pos_y, enemy_pos_y, temp_enemy):
     if player_pos_y == enemy_pos_y:
         temp_direction = "x"
-        if player_pos_x > enemy_pos_x:
-            enemy_speed = 1
-        elif player_pos_x < enemy_pos_x:
-            enemy_speed = -1
+        if enemy_pos_y == (screen_height/100)*81 or enemy_pos_y == (screen_height/100)*29:
+            if player_pos_x > enemy_pos_x:
+                enemy_speed = 1
+            elif player_pos_x < enemy_pos_x:
+                enemy_speed = -1
+            else:
+                enemy_speed = 0
         else:
             enemy_speed = 0
     elif player_pos_y > enemy_pos_y:
@@ -237,6 +240,8 @@ def find_direction(player_pos_x, enemy_pos_x, player_pos_y, enemy_pos_y, temp_en
                 enemy_speed = -1
             else:
                 enemy_speed = 0
+    else:
+        enemy_speed = 0
     temp_enemy.set_direction(enemy_speed,temp_direction)
 
 
