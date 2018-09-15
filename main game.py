@@ -169,9 +169,29 @@ def initialise_variables():
     global speed_powered_up
     speed_powered_up = False
 
+    ##speed timer on
+    global speed_timer_on
+    speed_timer_on = False
+
     ##player speed
     global player_speed
     player_speed = 2
+
+    ##bullet color
+    global bullet_color
+    bullet_color = RED
+
+    ##bullet damage
+    global bullet_damage
+    bullet_damage = 1
+
+    ##bullet powered up
+    global bullet_powered_up
+    bullet_powered_up = False
+
+    ## power timer on
+    global power_timer_on
+    power_timer_on = False
     
     ##initialises playerr attributes
     my_player.health = max_health
@@ -258,14 +278,14 @@ def find_direction(player_pos_x, enemy_pos_x, player_pos_y, enemy_pos_y, temp_en
     temp_enemy.set_direction(enemy_speed,temp_direction)
 
 
-def shoot(direction, player_x, player_y):
+def shoot(direction, player_x, player_y,bullet_color):
     if my_player.bullet_timer <= (pygame.time.get_ticks() - 300):
         player_y = player_y + (screen_width/40)*3
         if direction == "left":
             player_x = player_x
         elif direction == "right":
             player_x = (screen_width/70)*3 + player_x
-        temp_bullet = sprites.bullet(RED, 3,3, player_x, player_y,direction)
+        temp_bullet = sprites.bullet(bullet_color, 3,3, player_x, player_y,direction)
         my_bullet.append(temp_bullet)
         bullet_group.add(temp_bullet)
         all_sprites_group.add(temp_bullet)
@@ -352,14 +372,14 @@ while not done:
                     my_player.player_set_speed(int(player_speed))
                     player_direction = "right"
                 elif event.key == pygame.K_SPACE:
-                    shoot(player_direction, my_player.rect.x, my_player.rect.y)
+                    shoot(player_direction, my_player.rect.x, my_player.rect.y,bullet_color)
                     game_started = True
                     first_game = False
                 elif event.key ==pygame.K_MINUS:
                     door_group.add(my_door)
                     all_sprites_group.add(my_door)
                 elif event.key == pygame.K_0:
-                    my_powerup = sprites.power_up(PURPLE,50, 200, "speed")
+                    my_powerup = sprites.power_up(PURPLE,50, 200, "power")
                     power_up_group.add(my_powerup)
                     all_sprites_group.add(my_powerup)
                 elif can_climb == True:
@@ -452,8 +472,8 @@ while not done:
                     for test_enemy in enemy_group:
                         enemy_hit = pygame.sprite.collide_rect(test_bullet,test_enemy)
                         if enemy_hit == True:
-                            test_enemy.enemy_take_damage()
-                            if test_enemy.health == 0:
+                            test_enemy.enemy_take_damage(bullet_damage)
+                            if test_enemy.health <= 0:
                                 coin_drop(test_enemy.rect.x, test_enemy.rect.y)
                                 enemy_group.remove(test_enemy)
                                 all_sprites_group.remove(test_enemy)
@@ -485,6 +505,10 @@ while not done:
                     if temp_type == "speed":
                         player_speed = 3.5
                         speed_powered_up = True
+                    elif temp_type == "power":
+                        bullet_color = YELLOW
+                        bullet_damage = 2
+                        bullet_powered_up = True
                     power_up_group.remove(test_powerup)
                     all_sprites_group.remove(test_powerup)
 
@@ -500,6 +524,18 @@ while not done:
                     player_speed = 2
                     speed_timer_on = False
 
+            ##code for bullet powering down
+            if bullet_powered_up == True:
+                power_timer_start = pygame.time.get_ticks()
+                power_timer_end = power_timer_start + 7000
+                power_timer_on = True
+                bullet_powered_up = False
+            elif power_timer_on == True:
+                power_timer = pygame.time.get_ticks()
+                if power_timer >= power_timer_end:
+                    bullet_damage = 1
+                    power_timer_on = False
+                    bullet_color = RED
                         
 
             ##code for advancing level if door is touched
