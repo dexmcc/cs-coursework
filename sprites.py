@@ -67,7 +67,6 @@ class enemy(pygame.sprite.Sprite):
         self.rect.y = enemy_y
         self.health = health
         self.speed = 0
-        self.touching_ground = True
     def set_direction(self,speed,direction):
         self.speed = speed
         self.direction = direction
