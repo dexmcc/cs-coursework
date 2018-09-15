@@ -67,6 +67,7 @@ class enemy(pygame.sprite.Sprite):
         self.rect.y = enemy_y
         self.health = health
         self.speed = 0
+        self.touching_ground = True
     def set_direction(self,speed,direction):
         self.speed = speed
         self.direction = direction
@@ -122,3 +123,15 @@ class coin(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = coin_x
         self.rect.y = coin_y
+        
+class power_up(pygame.sprite.Sprite):
+    def __init__(self,color,power_x,power_y,power_type):
+        super().__init__()
+        self.image = pygame.Surface([20,20])
+        self.image.fill(color)
+        self.rect = self.image.get_rect()
+        self.rect.x = power_x
+        self.rect.y = power_y
+        self.type = power_type
+        
+
