@@ -161,6 +161,18 @@ def initialise_variables():
     global coin_group
     coin_group = pygame.sprite.Group()
 
+    ##power up group
+    global power_up_group
+    power_up_group = pygame.sprite.Group()
+
+    ##powered up varaible
+    global speed_powered_up
+    speed_powered_up = False
+
+    ##player speed
+    global player_speed
+    player_speed = 2
+    
     ##initialises playerr attributes
     my_player.health = max_health
     my_player.score = current_score
@@ -282,7 +294,10 @@ def coin_drop(enemy_x,enemy_y):
     my_coin = sprites.coin(YELLOW,enemy_x,enemy_y)
     coin_group.add(my_coin)
     all_sprites_group.add(my_coin)
-    
+
+def player_powerdown(power_type):
+    print("hello")
+        
 
 #creates main title screen
 instructions_1 = "use left and right keys to move left and right"
@@ -334,10 +349,10 @@ while not done:
                     paused = True
             if paused == False:
                 if event.key == pygame.K_LEFT and touching_ground == True:
-                    my_player.player_set_speed(int(-2))
+                    my_player.player_set_speed(int(-player_speed))
                     player_direction = "left"
                 elif event.key == pygame.K_RIGHT and touching_ground == True:
-                    my_player.player_set_speed(int(2))
+                    my_player.player_set_speed(int(player_speed))
                     player_direction = "right"
                 elif event.key == pygame.K_SPACE:
                     shoot(player_direction, my_player.rect.x, my_player.rect.y)
@@ -346,25 +361,29 @@ while not done:
                 elif event.key ==pygame.K_MINUS:
                     door_group.add(my_door)
                     all_sprites_group.add(my_door)
+                elif event.key == pygame.K_0:
+                    my_powerup = sprites.power_up(PURPLE,50, 200, "speed")
+                    power_up_group.add(my_powerup)
+                    all_sprites_group.add(my_powerup)
                 elif can_climb == True:
                     if event.key == pygame.K_UP:
-                        my_player.player_climb_speed(-4)
+                        my_player.player_climb_speed(int(-player_speed*2))
                         touching_ground = False
                     elif event.key == pygame.K_DOWN :
-                        my_player.player_climb_speed(4)
+                        my_player.player_climb_speed(int(player_speed*2))
                         touching_ground = False
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
-                if my_player.speed == -2:
+                if my_player.speed == -player_speed:
                     my_player.player_set_speed(int(0))
             elif event.key == pygame.K_RIGHT:
-                if my_player.speed == 2:
+                if my_player.speed == player_speed:
                     my_player.player_set_speed(int(0))
             elif event.key == pygame.K_UP:
-                if my_player.climb_speed == -4:
+                if my_player.climb_speed == -player_speed*2:
                     my_player.player_climb_speed(0)
             elif event.key == pygame.K_DOWN:
-                if my_player.climb_speed == 4:
+                if my_player.climb_speed == player_speed*2:
                     my_player.player_climb_speed(0)
     # --- Game logic should go here
     if game_started == True:
@@ -461,6 +480,17 @@ while not done:
                         if my_player.lives < 0:
                             game_over = True
                             game_started = False
+
+            ##for player touching power up
+            for test_powerup in power_up_group:
+                if pygame.sprite.spritecollide(my_player,power_up_group,False):
+                    temp_type = test_powerup.type
+                    if temp_type == "speed":
+                        player_speed = 3
+                        speed_powered_up = True
+                    power_up_group.remove(test_powerup)
+                    all_sprites_group.remove(test_powerup)
+
             ##code for advancing level if door is touched
             if pygame.sprite.spritecollide(my_player, door_group, False):
                 new_level = True

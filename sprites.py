@@ -132,6 +132,6 @@ class power_up(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = power_x
         self.rect.y = power_y
-        self.type = power_type
+        self.type = str(power_type)
         
 
