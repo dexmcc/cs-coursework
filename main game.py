@@ -186,6 +186,10 @@ def initialise_variables():
     ## power timer on
     global power_timer_on
     power_timer_on = False
+
+    ##speed_up on
+    global speed_up
+    speed_up = False
     
     ##initialises playerr attributes
     my_player.health = max_health
@@ -450,11 +454,20 @@ while not done:
                 ##checkign to see if player is inputting a direction and touching the ground
                 if event.key == pygame.K_LEFT and touching_ground == True:
                     ##setting the player speed to go left
-                    my_player.player_set_speed(int(-player_speed))
-                    player_direction = "left"
+                    ##seeing if the speed is powered up
+                    if speed_up == False:
+                        my_player.player_set_speed(int(-player_speed))
+                        player_direction = "left"
+                    else:
+                        my_player.player_set_speed(int(-player_speed)-1)
+                        player_direction = "left"
                 elif event.key == pygame.K_RIGHT and touching_ground == True:
-                    my_player.player_set_speed(int(player_speed))
-                    player_direction = "right"
+                    if speed_up == False:
+                        my_player.player_set_speed(int(player_speed))
+                        player_direction = "right"
+                    else:
+                        my_player.player_set_speed(int(player_speed)+1)
+                        player_direction = "right"
                 ##checking to see if the player is shooting, or that they want to start the game
                 elif event.key == pygame.K_SPACE:
                     ##calling the shooting function
@@ -475,25 +488,33 @@ while not done:
                 elif can_climb == True:
                     ##moving the player up or down, and setting it so that it cannot go left or right while climbing
                     if event.key == pygame.K_UP:
-                        my_player.player_climb_speed(int(-player_speed*2))
-                        touching_ground = False
+                        if speed_up == False:
+                            my_player.player_climb_speed(int(-player_speed*2))
+                            touching_ground = False
+                        else:
+                            my_player.player_climb_speed((int(-player_speed)-1)*2)
+                            touching_ground = False
                     elif event.key == pygame.K_DOWN :
-                        my_player.player_climb_speed(int(player_speed*2))
-                        touching_ground = False
+                        if speed_up == False:
+                            my_player.player_climb_speed(int(player_speed*2))
+                            touching_ground = False
+                        else:
+                            my_player.player_climb_speed((int(player_speed)+1)*2)
+                            touching_ground = False
         ##checking if the player has released the keys
         elif event.type == pygame.KEYUP:
             ##making it so that the player doesn't keep moving a direction after letting go of the key
             if event.key == pygame.K_LEFT:
-                if my_player.speed == -2 or my_player.speed  == -3.5 or my_player.speed == -player_speed:
+                if my_player.speed == -2 or my_player.speed  == -3 or my_player.speed == -player_speed:
                     my_player.player_set_speed(int(0))
             elif event.key == pygame.K_RIGHT:
-                if my_player.speed == 2 or my_player.speed == 3.5:
+                if my_player.speed == 2 or my_player.speed == 3:
                     my_player.player_set_speed(int(0))
             elif event.key == pygame.K_UP:
-                if my_player.climb_speed == -4 or my_player.climb_speed == -7:
+                if my_player.climb_speed == -4 or my_player.climb_speed == -6:
                     my_player.player_climb_speed(0)
             elif event.key == pygame.K_DOWN:
-                if my_player.climb_speed == 4 or my_player.climb_speed == -7:
+                if my_player.climb_speed == 4 or my_player.climb_speed == 6:
                     my_player.player_climb_speed(0)
 
     # --- Game logic should go here
@@ -521,29 +542,34 @@ while not done:
                     ladder_1_check = pygame.sprite.spritecollideany(my_player, ladders_1, False)
                     if ladder_1_check:
                         ##checking the y axises for when the player is one movement above or below a ladder
-                        if my_player.rect.y ==334:
+                        if my_player.rect.y ==334 or my_player.rect.y ==336:
                             ##putting the player back at a height that means it will be able to climb back down
                             my_player.rect.y = 330
                             ##setting the touching ground variable to true so player can move left and right
                             touching_ground = True
-                        elif my_player.rect.y == 166:
+                        elif my_player.rect.y == 166 or my_player.rect.y == 164:
                             my_player.rect.y = 170
                             touching_ground = True 
                     else:
-                        if my_player.rect.y == 70:
+                        if my_player.rect.y == 70 or my_player.rect.y == 68:
                             my_player.rect.y = 74
                             touching_ground = True
-                        elif my_player.rect.y == 174:
+                        elif my_player.rect.y == 174 or my_player.rect.y == 176:
                             my_player.rect.y = 170
                             touching_ground = True 
                 else:
                     if my_player.rect.y == 145:
                         my_player.rect.y = 149                        
                         touching_ground = True
-                    elif my_player.rect.y == 409:
+                    elif my_player.rect.y == 409 or my_player.rect.y >= 411:
                         my_player.rect.y = 405
                         touching_ground = True
-
+            print(my_player.rect.y)
+            ##checking for if player is lifted off ground because of speed power up
+            if my_player.rect.y == 141 or my_player.rect.y == 143:
+                my_player.rect.y = 149
+                touching_ground = True
+                       
             ##making sure the player can only climb when touching a ladder
             if can_climb == False:
                 ##setting climb speed to 0
@@ -638,8 +664,9 @@ while not done:
                     ##checking what the powerup type is
                     if temp_type == "speed":
                         ##increasing the player speed
-                        player_speed = 3.5
+                        ##player_speed = 3.5
                         speed_powered_up = True
+                        speed_up = True
                     elif temp_type == "power":
                         ##changing the damage of the bullets
                         bullet_color = YELLOW
@@ -666,7 +693,7 @@ while not done:
                 ##checking to see if it has reached the end
                 if speed_timer >= speed_timer_end:
                     ##reseting speed
-                    player_speed = 2
+                    speed_up = False
                     speed_timer_on = False
 
             ##code for bullet powering down
