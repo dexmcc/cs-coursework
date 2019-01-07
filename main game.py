@@ -421,6 +421,10 @@ while not done:
         for i in enemy_group:
             enemy_group.remove(i)
             all_sprites_group.remove(i)
+        ##for stopping the coin door detection
+        coin_flag = False
+        ##resetting player coins:
+        my_player.coins = 0
         ##calls the level making function
         level_maker(level)
         ##setting it so that it won't create another level till it is needed
@@ -479,6 +483,9 @@ while not done:
                 elif event.key ==pygame.K_MINUS:
                     door_group.add(my_door)
                     all_sprites_group.add(my_door)
+                ##testing for coins
+                elif event.key == pygame.K_PERIOD:
+                    my_player.coins = my_player.coins + 1
                 ##testing for powerups
                 elif event.key == pygame.K_0:
                     my_powerup = sprites.power_up(PURPLE,50, 200, "speed")
@@ -564,7 +571,7 @@ while not done:
                     elif my_player.rect.y == 409 or my_player.rect.y >= 411:
                         my_player.rect.y = 405
                         touching_ground = True
-            print(my_player.rect.y)
+
             ##checking for if player is lifted off ground because of speed power up
             if my_player.rect.y == 141 or my_player.rect.y == 143:
                 my_player.rect.y = 149
@@ -584,14 +591,18 @@ while not done:
                     ##remove the sprites from the coin group and all sprites group
                     coin_group.remove(i)
                     all_sprites_group.remove(i)
+
+
             
             ##code for level door
             if new_level == False:
-                ##if the door is not meant to be hidden anymore, it will be added to the all sprites group if it isn't already
-                ##this will mean it will be drawn
-                if my_door.in_group == False and my_door.hidden == False:
+                ##if the player has enough coins, the door will be revealed
+                if my_player.coins >= 15 and coin_flag == False:
+                    my_door.hidden == False
                     all_sprites_group.add(my_door)
+                    door_group.add(my_door)
                     my_door.in_group = True
+
             
             ##code for getting rid of bullets that have hit enemies
             for test_bullet in bullet_group:
@@ -695,6 +706,7 @@ while not done:
                     ##reseting speed
                     speed_up = False
                     speed_timer_on = False
+
 
             ##code for bullet powering down
             ##checking for powerup timer
