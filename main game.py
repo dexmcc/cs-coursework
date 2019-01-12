@@ -440,8 +440,8 @@ while not done:
         if event.type == pygame.QUIT:
             ##setting the quitting variable to true
             done = True
-        ##checking to see if it is time for a new enemy to spawn
-        elif event.type == pygame.USEREVENT:
+        ##checking to see if it is time for a new enemy to spawn and game is started
+        elif event.type == pygame.USEREVENT and game_started == True:
             ##calling the enemy spawn function
             enemy_spawn(enemy_counter)
         ##checking for keyboard inputs
