@@ -455,6 +455,8 @@ while not done:
                     paused = True
             ##making sure the player doesn't move around while the game is paused
             if paused == False:
+                if event.key == pygame.K_q:
+                    my_player.health = my_player.health - 1
                 ##checkign to see if player is inputting a direction and touching the ground
                 if event.key == pygame.K_LEFT and touching_ground == True:
                     ##setting the player speed to go left
