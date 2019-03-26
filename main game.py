@@ -47,8 +47,13 @@ paused_text = my_pause_font.render("GAME PAUSED", True, GREEN)
 ##sets new game variable
 first_game = True
 
+##retrieving images to use for sprites
+player_image = pygame.image.load("player.png").convert()
+enemy_image = pygame.image.load("enemy.png").convert()
+
 ## initialises player variable
-my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/20)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/5)*4, 0,0, 0)
+my_player = sprites.player(GREEN, (screen_width/70)*3, (screen_height/20)*3,(screen_width/2)-((screen_width/70)*3)/2,screen_height-(screen_height/5)*4, 0,0, 0, player_image)
+
 
 
 ##initialisation function
@@ -336,7 +341,7 @@ def enemy_spawn(enemy_counter):
         enemy_type = "coin"
         enemy_color = BLUE
     ##creating an enemy sprite using these attributes
-    temp_spawn_enemy = sprites.enemy(enemy_color,screen_width/70*3, (screen_height/20)*3,spawn_x,spawn_y,5,enemy_type)
+    temp_spawn_enemy = sprites.enemy(enemy_color,screen_width/70*3, (screen_height/20)*3,spawn_x,spawn_y,5,enemy_type,enemy_image)
     ##adding this sprite to a list of enemies, a group of enemy sprites, and all sprites group
     my_enemy.append(temp_spawn_enemy)
     enemy_group.add(temp_spawn_enemy)
@@ -397,6 +402,7 @@ over_2 = "press space to play again"
 over_text_1 = score_font.render(over_1, True, RED)
 over_text_2 = score_font.render(over_2, True, RED)
 
+freeze = False
 
 # -------- Main Program Loop -----------
 ##checking to make sure the game should be kept open
@@ -453,6 +459,8 @@ while not done:
                     paused = False
                 elif paused == False:
                     paused = True
+            elif event.key==pygame.K_f:
+                freeze = True
             ##making sure the player doesn't move around while the game is paused
             if paused == False:
                 if event.key == pygame.K_q:
@@ -530,8 +538,18 @@ while not done:
     ##only runs the game logic while the game should be starting
     if game_started == True:
         if paused == False: #-- only plays game logic and draw loop if paused
-            
-            ##calling the function to find the direction to move in for each enemy in the enemy group
+            while freeze == True:
+                ##draws all sprites in the sprites group
+                all_sprites_group.draw(screen)
+                ##draws score
+                screen.blit(score_text, [30,0])
+                ##draws health
+                screen.blit(health_text, [150,0])
+                ##draws lives
+                screen.blit(lives_text, [300,0])
+                ##draws coins
+                screen.blit(coins_text, [400,0])
+                ##calling the function to find the direction to move in for each enemy in the enemy group
             for enemy_find_direction in enemy_group:
                 find_direction(my_player.rect.x,enemy_find_direction.rect.x,my_player.rect.y, enemy_find_direction.rect.y, enemy_find_direction)
             
@@ -662,7 +680,7 @@ while not done:
                         my_player.player_lose_life(max_health)
                         ##reset player location
                         my_player.rect.x =(screen_width/2)-((screen_width/70)*3)/2
-                        my_player.rect.y = screen_height-(screen_height/25)-((screen_height/10)*3)
+                        my_player.rect.y = 405
                         ##checking to see if there is a game over
                         if my_player.lives < 0:
                             ##trigger game over

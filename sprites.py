@@ -16,12 +16,11 @@ class wall(pygame.sprite.Sprite):
 ##player sprite class
 class player(pygame.sprite.Sprite):
     #defines constructor for player
-    def __init__(self, color, width, height, player_x, player_y,player_health,player_lives, player_score):
+    def __init__(self, color, width, height, player_x, player_y,player_health,player_lives, player_score,player_image):
         #calls sprite constructor
         super().__init__()
         ##creates rectangle sprite
-        self.image = pygame.Surface([width, height])
-        self.image.fill(color)
+        self.image = player_image
         self.rect = self.image.get_rect()
         #sets x and y values
         self.rect.x = player_x
@@ -85,12 +84,11 @@ class ladder(pygame.sprite.Sprite):
 ##enemy sprite class
 class enemy(pygame.sprite.Sprite):
     ##defines enemy sprite constructor
-    def __init__(self,color,width,height,enemy_x, enemy_y, health,enemy_type):
+    def __init__(self,color,width,height,enemy_x, enemy_y, health,enemy_type,enemy_image):
         ##calls sprite constructor
         super().__init__()
         ##creates sprite rectangle
-        self.image = pygame.Surface([width,height])
-        self.image.fill(color)
+        self.image = enemy_image
         self.rect = self.image.get_rect()
         ##sets x and y and health values
         self.rect.x = enemy_x
